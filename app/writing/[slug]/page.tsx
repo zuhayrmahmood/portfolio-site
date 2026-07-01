@@ -45,17 +45,17 @@ export default async function PostPage({ params }: PostPageProps) {
         <header>
           <Link
             href="/writing"
-            className="font-mono text-xs uppercase tracking-[0.15em] text-subtle transition-colors hover:text-accent"
+            className="eyebrow inline-block text-subtle transition-colors hover:text-accent"
           >
             ← Writing
           </Link>
           <time
             dateTime={metadata.date}
-            className="mt-8 block font-mono text-xs uppercase tracking-[0.15em] text-subtle"
+            className="eyebrow mt-8 block text-subtle"
           >
             {formatDate(metadata.date)}
           </time>
-          <h1 className="mt-3 font-serif text-4xl font-medium leading-tight tracking-tight text-foreground sm:text-5xl">
+          <h1 className="mt-3 font-title text-[clamp(2.25rem,6vw,3.25rem)] leading-[1.05] text-foreground">
             {metadata.title}
           </h1>
         </header>

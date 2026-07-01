@@ -15,6 +15,7 @@
   --color-accent-hover: #a9542f; /* darker terracotta        */
   --color-accent-soft: #f0e2d8; /* accent tint background   */
   --color-border: #e7e1d8; /* warm hairline borders    */
+  --color-ground: #ded5c8; /* hero "ground" line       */
 }
 
 /* Fonts are wired to the next/font CSS variables set in app/layout.tsx.
@@ -35,11 +36,33 @@ html {
 }
 
 body {
-  background: var(--color-background);
+  /* Cream, warmed by a soft highlight from the top so the page reads as
+   * lit printed paper rather than a flat fill. */
+  background-color: var(--color-background);
+  background-image: radial-gradient(
+    115% 80% at 50% -12%,
+    #ffffff 0%,
+    rgba(255, 255, 255, 0) 52%
+  );
+  background-attachment: fixed;
   color: var(--color-foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Fine paper grain over the whole page. Sits above the background fill but
+ * below content (negative z-index), never intercepts input, and is skipped
+ * for the print-like surfaces (white cards) that paint over it. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Accent focus ring for keyboard users */
@@ -52,6 +75,35 @@ body {
 ::selection {
   background: var(--color-accent);
   color: #fff;
+}
+
+/* ------------------------------------------------------------------ *
+ * Display typography — Fraunces variable axes
+ * `opsz` (optical size), `SOFT` (terminal softness), `WONK` (quirk) are
+ * requested in app/layout.tsx. High optical size gives the display name its
+ * high-contrast serifs; a touch of WONK adds personality to the wordmark and
+ * hero. Weight is pinned in the axis string so it can't be reset by the
+ * low-level `font-variation-settings` override.
+ * ------------------------------------------------------------------ */
+.font-display {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 144, "wght" 500, "SOFT" 0, "WONK" 1;
+  letter-spacing: -0.021em;
+}
+
+.font-title {
+  font-family: var(--font-serif);
+  font-variation-settings: "opsz" 80, "wght" 480, "SOFT" 0, "WONK" 0;
+  letter-spacing: -0.018em;
+}
+
+/* Small uppercase mono label — the site's editorial "index" voice. */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
 }
 
 /* ------------------------------------------------------------------ *
@@ -95,6 +147,46 @@ body {
 .reveal {
   animation: reveal-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-delay: var(--reveal-delay, 0s);
+}
+
+/* ------------------------------------------------------------------ *
+ * Hero — draggable physics name
+ * The letters are positioned/animated imperatively in components/
+ * physics-hero.tsx; these are the static affordances around them.
+ * ------------------------------------------------------------------ */
+/* A hairline the letters visually rest on. */
+.hero-ground {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-ground) 12%,
+    var(--color-ground) 88%,
+    transparent
+  );
+}
+
+/* One-time "drag the letters" affordance; fades itself out. */
+@keyframes hint-fade {
+  0%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.hero-hint {
+  animation: hint-fade 5s ease-in forwards;
+  animation-delay: 1.2s;
+}
+
+/* The name is static on touch (touch scrolls the page), so no drag hint. */
+@media (hover: none) {
+  .hero-hint {
+    display: none;
+  }
 }
 
 /* Respect users who prefer reduced motion */

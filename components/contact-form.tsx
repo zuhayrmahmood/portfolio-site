@@ -7,7 +7,7 @@ import { validateContact, type ContactErrors } from "@/lib/contact";
 type Status = "idle" | "submitting" | "success" | "error";
 
 const inputBase =
-  "w-full rounded-lg border border-border bg-surface px-4 py-3 text-foreground placeholder:text-subtle transition-colors focus:border-accent";
+  "w-full rounded-xl border border-border bg-surface px-4 py-3 text-foreground placeholder:text-subtle transition-all focus:border-accent focus:ring-2 focus:ring-accent/15 aria-[invalid=true]:border-accent/70 aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-accent/15";
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
@@ -68,7 +68,7 @@ export function ContactForm() {
     return (
       <div
         role="status"
-        className="rounded-2xl border border-border bg-surface p-8"
+        className="rounded-2xl border border-border bg-surface p-8 shadow-[0_10px_30px_rgba(43,42,40,0.06)]"
       >
         <p className="text-lg text-foreground">
           Thanks — your message is on its way.
@@ -143,7 +143,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="inline-flex h-11 items-center justify-center rounded-full bg-accent px-6 text-sm font-medium text-white transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex h-11 items-center justify-center rounded-full bg-accent px-6 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
       >
         {submitting ? "Sending…" : "Send message"}
       </button>

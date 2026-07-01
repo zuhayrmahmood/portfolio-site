@@ -36,23 +36,23 @@ export default async function WritingPage() {
               <Reveal delay={Math.min(i * 0.05, 0.2)}>
                 <Link
                   href={`/writing/${post.slug}`}
-                  className="group block border-b border-border py-8"
+                  className="group block border-b border-border py-8 transition-colors"
                 >
                   <time
                     dateTime={post.date}
-                    className="font-mono text-xs uppercase tracking-[0.15em] text-subtle"
+                    className="eyebrow text-subtle transition-colors group-hover:text-accent"
                   >
                     {formatDate(post.date)}
                   </time>
-                  <h2 className="mt-2 font-serif text-2xl font-medium tracking-tight text-foreground transition-colors group-hover:text-accent">
+                  <h2 className="mt-3 font-serif text-2xl font-medium tracking-tight text-foreground transition-colors group-hover:text-accent sm:text-[1.75rem]">
                     {post.title}
                   </h2>
                   <p className="mt-2 leading-relaxed text-muted">
                     {post.summary}
                   </p>
-                  <span className="mt-3 inline-block text-sm font-medium text-accent">
-                    Read{" "}
-                    <span className="transition-transform group-hover:translate-x-0.5 inline-block">
+                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-accent">
+                    Read
+                    <span className="inline-block transition-transform duration-200 group-hover:translate-x-1">
                       →
                     </span>
                   </span>

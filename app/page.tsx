@@ -5,19 +5,18 @@ import { PhysicsHero } from "@/components/physics-hero";
 export default function Home() {
   return (
     <div className="mx-auto w-full max-w-3xl px-6">
-      <section className="flex min-h-[calc(78svh-4rem)] flex-col justify-center py-12">
-        {/* <Reveal>
-          <p className="mb-5 font-mono text-xs uppercase tracking-[0.2em] text-accent">
-            Portfolio
-          </p>
-        </Reveal> */}
+      <section className="flex min-h-[calc(82svh-4rem)] flex-col justify-center py-16">
+        <Reveal>
+          <p className="eyebrow mb-6 text-accent">Personal site</p>
+        </Reveal>
 
-        {/* Interactive Matter.js hero — cursor-shoved, spring-back name.
-            Falls back to a static name for reduced-motion / no-JS. */}
+        {/* Interactive Matter.js hero — grab, fling, and scatter the letters;
+            they spring back into the name. Falls back to a static name for
+            reduced-motion / no-JS / touch. */}
         <PhysicsHero />
 
         <Reveal delay={0.12}>
-          <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted sm:text-xl">
+          <p className="mt-9 max-w-xl text-pretty text-xl leading-relaxed text-muted sm:text-2xl">
             {/* TODO: your one-liner */}
             I&rsquo;m a <span className="text-foreground">[what you do]</span>.
             This is where I write, build, and share what I&rsquo;m thinking
@@ -29,13 +28,16 @@ export default function Home() {
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
               href="/writing"
-              className="inline-flex h-11 items-center justify-center rounded-full bg-accent px-6 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
+              className="group inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-accent px-6 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md"
             >
               Read my writing
+              <span className="transition-transform duration-200 group-hover:translate-x-0.5">
+                →
+              </span>
             </Link>
             <Link
               href="/about"
-              className="inline-flex h-11 items-center justify-center rounded-full border border-border bg-surface px-6 text-sm font-medium text-foreground transition-colors hover:bg-surface-2"
+              className="inline-flex h-11 items-center justify-center rounded-full border border-border bg-surface/60 px-6 text-sm font-medium text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-2"
             >
               About me
             </Link>

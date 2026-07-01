@@ -27,9 +27,7 @@ export default function ContactPage() {
 
       <Reveal delay={0.12}>
         <div className="mt-14">
-          <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-            Or find me elsewhere
-          </h2>
+          <h2 className="eyebrow text-accent">Or find me elsewhere</h2>
           <ul className="mt-4 flex flex-col divide-y divide-border border-y border-border">
             {links.map((s) => (
               <li key={s.label}>

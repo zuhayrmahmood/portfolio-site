@@ -24,7 +24,7 @@ export default function AboutPage() {
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-10">
           <Portrait name={site.name} />
           <div>
-            <h1 className="font-serif text-4xl font-medium tracking-tight text-foreground sm:text-5xl">
+            <h1 className="font-title text-[clamp(2.25rem,6vw,3.25rem)] leading-[1.02] text-foreground">
               About
             </h1>
             {/* TODO: replace with your real bio. */}
@@ -48,9 +48,7 @@ export default function AboutPage() {
       {/* Currently */}
       <Reveal delay={0.06}>
         <section className="mt-16">
-          <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-            Currently
-          </h2>
+          <h2 className="eyebrow text-accent">Currently</h2>
           <dl className="mt-6 divide-y divide-border border-y border-border">
             {currently.map((item) => (
               <div
@@ -67,15 +65,18 @@ export default function AboutPage() {
 
       {/* Contact CTA */}
       <Reveal delay={0.12}>
-        <section className="mt-16 rounded-2xl border border-border bg-surface p-8">
+        <section className="mt-16 rounded-2xl border border-border bg-surface p-8 shadow-[0_10px_30px_rgba(43,42,40,0.06)]">
           <p className="text-lg text-foreground">
             Have an idea, a role, or just want to say hi?
           </p>
           <Link
             href="/contact"
-            className="mt-5 inline-flex h-11 items-center justify-center rounded-full bg-accent px-6 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
+            className="group mt-5 inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-accent px-6 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md"
           >
-            Get in touch →
+            Get in touch
+            <span className="transition-transform duration-200 group-hover:translate-x-0.5">
+              →
+            </span>
           </Link>
         </section>
       </Reveal>

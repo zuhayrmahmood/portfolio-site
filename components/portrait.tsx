@@ -27,11 +27,11 @@ export function Portrait({ name, className }: PortraitProps) {
   return (
     <div
       className={cn(
-        "relative aspect-square w-28 shrink-0 overflow-hidden rounded-2xl border border-border bg-accent-soft sm:w-40",
+        "relative aspect-square w-28 shrink-0 overflow-hidden rounded-2xl border border-border bg-accent-soft shadow-[0_10px_30px_rgba(43,42,40,0.08)] ring-1 ring-black/[0.02] sm:w-40",
         className,
       )}
     >
-      <div className="flex h-full w-full items-center justify-center font-serif text-3xl font-medium text-accent sm:text-4xl">
+      <div className="flex h-full w-full items-center justify-center font-title text-3xl text-accent sm:text-4xl">
         {initials}
       </div>
     </div>

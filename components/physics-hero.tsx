@@ -27,6 +27,18 @@ const LINE_GLYPHS: Glyph[][] = (() => {
 
 const TOTAL = LINE_GLYPHS.reduce((n, l) => n + l.length, 0);
 
+/**
+ * Touch / coarse-pointer devices get the static name (touch is left to scroll
+ * the page), so the physics is desktop-pointer only. Called from client
+ * effects only — never during SSR.
+ */
+function isCoarsePointer(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(hover: none), (pointer: coarse)").matches
+  );
+}
+
 export function PhysicsHero() {
   const reduceMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -38,7 +50,7 @@ export function PhysicsHero() {
   // ignored so we don't loop.
   useEffect(() => {
     const el = containerRef.current;
-    if (!el || reduceMotion) return;
+    if (!el || reduceMotion || isCoarsePointer()) return;
     let lastWidth = el.clientWidth;
     let timer = 0;
     const ro = new ResizeObserver(() => {
@@ -58,7 +70,7 @@ export function PhysicsHero() {
   // The physics simulation. Skipped entirely for reduced-motion users, who
   // just see the static (in-flow) name.
   useEffect(() => {
-    if (reduceMotion) return;
+    if (reduceMotion || isCoarsePointer()) return;
     const container = containerRef.current;
     if (!container) return;
 
@@ -85,28 +97,47 @@ export function PhysicsHero() {
   }, [reduceMotion, layoutTick]);
 
   return (
-    <div ref={containerRef} className="relative w-full select-none py-3 sm:py-4">
-      <h1
-        aria-label={FULL_NAME}
-        className="font-serif text-6xl font-medium leading-[0.95] tracking-tight text-foreground sm:text-8xl"
+    <div className="relative">
+      <div
+        ref={containerRef}
+        className="relative w-full cursor-grab select-none py-8 active:cursor-grabbing sm:py-12"
       >
-        {LINE_GLYPHS.map((glyphs, li) => (
-          <span key={li} className="block whitespace-nowrap">
-            {glyphs.map((g) => (
-              <span
-                key={g.index}
-                ref={(el) => {
-                  spanRefs.current[g.index] = el;
-                }}
-                aria-hidden="true"
-                className="inline-block"
-              >
-                {g.char}
-              </span>
-            ))}
+        <h1
+          aria-label={FULL_NAME}
+          className="font-display text-[clamp(3.25rem,12vw,7.5rem)] leading-[0.9] text-foreground"
+        >
+          {LINE_GLYPHS.map((glyphs, li) => (
+            <span key={li} className="block whitespace-nowrap">
+              {glyphs.map((g) => (
+                <span
+                  key={g.index}
+                  ref={(el) => {
+                    spanRefs.current[g.index] = el;
+                  }}
+                  aria-hidden="true"
+                  className="inline-block"
+                >
+                  {g.char}
+                </span>
+              ))}
+            </span>
+          ))}
+        </h1>
+
+        {/* Mouse-only affordance; fades itself out (see .hero-hint) and is
+            hidden on touch devices and for reduced-motion users. */}
+        {!reduceMotion && (
+          <span
+            aria-hidden="true"
+            className="hero-hint eyebrow pointer-events-none absolute right-1 top-1 text-subtle"
+          >
+            drag me
           </span>
-        ))}
-      </h1>
+        )}
+      </div>
+
+      {/* A delicate editorial rule the name sits above. */}
+      <div className="hero-ground mt-6" aria-hidden="true" />
     </div>
   );
 }
@@ -123,14 +154,26 @@ type Letter = {
   home: { x: number; y: number };
   w: number;
   h: number;
+  scale: number; // eased render scale (1, or GRAB_SCALE while held)
 };
 
-// Feel tuning — all safe, over-damped defaults.
-const HOME_STIFFNESS = 0.0022; // pull back toward the spelled name
-const ANGULAR_RETURN = 0.08; // settle glyphs upright
+// Feel tuning. The home pull is a real Matter Constraint (spring) per glyph —
+// the solver is unconditionally stable and identical across engines, unlike a
+// hand-applied force whose stiffness sits at the integrator's stability edge
+// (that version exploded to NaN in Firefox/Safari). Snappy but well-damped.
+const HOME_STIFFNESS = 0.06; // home-spring constraint stiffness
+const HOME_DAMPING = 0.14; // home-spring damping (kills overshoot cleanly)
+const ANGULAR_RETURN = 0.1; // settle glyphs upright
 const REPEL_RADIUS = 140; // px around the cursor
-const REPEL_STRENGTH = 0.055; // shove force
-const MAX_SPEED = 26; // velocity clamp (anti-explosion)
+const REPEL_STRENGTH = 0.05; // shove force
+const MAX_SPEED = 40; // velocity clamp (safety net)
+const GRAB_SCALE = 1.08; // pop the held glyph
+// Collision bodies are smaller than the glyph boxes so tightly-kerned letters
+// don't push each other off home when idle — they only collide during play.
+const BODY_W = 0.82;
+const BODY_H = 0.64;
+const REST_SHADOW = "0 10px 22px rgba(43, 42, 40, 0.09)";
+const GRAB_SHADOW = "0 18px 30px rgba(43, 42, 40, 0.18)";
 
 function runSimulation(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -138,8 +181,16 @@ function runSimulation(
   container: HTMLDivElement,
   spans: (HTMLSpanElement | null)[],
 ): () => void {
-  const { Engine, Bodies, Body, Composite, Mouse, MouseConstraint, Events } =
-    Matter;
+  const {
+    Engine,
+    Bodies,
+    Body,
+    Composite,
+    Constraint,
+    Mouse,
+    MouseConstraint,
+    Events,
+  } = Matter;
 
   // --- Measure home positions from the current in-flow layout ---
   const containerRect = container.getBoundingClientRect();
@@ -160,6 +211,7 @@ function runSimulation(
       },
       w: r.width,
       h: r.height,
+      scale: 1,
     });
   }
   if (letters.length === 0) return () => {};
@@ -173,20 +225,36 @@ function runSimulation(
   engine.gravity.y = 0;
 
   const bodyToLetter = new Map<MatterBody, Letter>();
+  const homeConstraints: unknown[] = [];
 
   for (const L of letters) {
-    // Small random offset so the name "assembles" into place on load.
-    const ox = (Math.random() - 0.5) * 10;
-    const oy = (Math.random() - 0.5) * 8 - 8;
-    const body = Bodies.rectangle(L.home.x + ox, L.home.y + oy, L.w, L.h, {
-      frictionAir: 0.14,
+    // Start scattered a little above home so the name settles into place on
+    // load — an orchestrated "assemble" rather than a hard cut.
+    const ox = (Math.random() - 0.5) * 18;
+    const oy = (Math.random() - 0.5) * 12 - 16;
+    const bw = L.w * BODY_W;
+    const bh = L.h * BODY_H;
+    const body = Bodies.rectangle(L.home.x + ox, L.home.y + oy, bw, bh, {
+      frictionAir: 0.09,
       friction: 0.05,
-      restitution: 0.35,
-      chamfer: { radius: Math.min(L.w, L.h) * 0.18 },
+      restitution: 0.4,
+      chamfer: { radius: Math.min(bw, bh) * 0.2 },
     });
-    Body.setAngle(body, (Math.random() - 0.5) * 0.18);
+    Body.setAngle(body, (Math.random() - 0.5) * 0.22);
     L.body = body;
     bodyToLetter.set(body, L);
+
+    // Anchor the glyph to its spelled-out position with a damped spring.
+    homeConstraints.push(
+      Constraint.create({
+        pointA: { x: L.home.x, y: L.home.y },
+        bodyB: body,
+        length: 0,
+        stiffness: HOME_STIFFNESS,
+        damping: HOME_DAMPING,
+        render: { visible: false },
+      }),
+    );
 
     // Place the glyph at its start immediately to avoid a (0,0) flash.
     L.el.style.position = "absolute";
@@ -194,6 +262,7 @@ function runSimulation(
     L.el.style.top = "0px";
     L.el.style.margin = "0";
     L.el.style.willChange = "transform";
+    L.el.style.textShadow = REST_SHADOW;
     L.el.style.transform = `translate(${body.position.x - L.w / 2}px, ${
       body.position.y - L.h / 2
     }px) rotate(${body.angle}rad)`;
@@ -210,7 +279,11 @@ function runSimulation(
     wall(width + t / 2, height / 2, t, height + 2 * t),
   ];
 
-  Composite.add(engine.world, [...letters.map((l) => l.body), ...walls]);
+  Composite.add(engine.world, [
+    ...letters.map((l) => l.body),
+    ...walls,
+    ...homeConstraints,
+  ]);
 
   // --- Drag & throw (mouse only; touch is left to scroll the page) ---
   const mouse = Mouse.create(container);
@@ -221,20 +294,39 @@ function runSimulation(
   mouse.element.removeEventListener("mousewheel", mouse.mousewheel);
   mouse.element.removeEventListener("DOMMouseScroll", mouse.mousewheel);
 
+  // A grab starts only when pressing on the name (mousedown stays on the
+  // container), but move/release are tracked on the window so a fling that
+  // ends outside the hero still lets go — otherwise the letter sticks to the
+  // cursor forever (Matter binds these to the element by default).
+  mouse.element.removeEventListener("mousemove", mouse.mousemove);
+  mouse.element.removeEventListener("mouseup", mouse.mouseup);
+  window.addEventListener("mousemove", mouse.mousemove);
+  window.addEventListener("mouseup", mouse.mouseup);
+
   const mouseConstraint = MouseConstraint.create(engine, {
     mouse,
-    constraint: { stiffness: 0.2, render: { visible: false } },
+    // Stiff grab so a held glyph tracks the cursor tightly and flings with
+    // momentum on release.
+    constraint: { stiffness: 0.85, damping: 0.1, render: { visible: false } },
   });
   Composite.add(engine.world, mouseConstraint);
 
-  // Highlight the grabbed glyph in the accent colour.
+  // Highlight + lift the grabbed glyph.
   Events.on(mouseConstraint, "startdrag", (e: { body?: MatterBody }) => {
     const L = e.body && bodyToLetter.get(e.body);
-    if (L) L.el.style.color = "var(--color-accent)";
+    if (L) {
+      L.el.style.color = "var(--color-accent)";
+      L.el.style.textShadow = GRAB_SHADOW;
+      L.el.style.zIndex = "1";
+    }
   });
   Events.on(mouseConstraint, "enddrag", (e: { body?: MatterBody }) => {
     const L = e.body && bodyToLetter.get(e.body);
-    if (L) L.el.style.color = "";
+    if (L) {
+      L.el.style.color = "";
+      L.el.style.textShadow = REST_SHADOW;
+      L.el.style.zIndex = "";
+    }
   });
 
   // --- Cursor repulsion (mouse pointer only) ---
@@ -253,29 +345,25 @@ function runSimulation(
   container.addEventListener("pointerleave", onPointerLeave);
 
   // --- Animation loop ---
+  // A FIXED timestep is essential: Matter's integrator scales by the ratio of
+  // successive deltas, so feeding it the variable rAF delta makes velocities
+  // explode to NaN on the first odd frame — stable in Chromium, but it blows
+  // up in Firefox/Safari (whose rAF timing differs). A constant step is what
+  // Matter recommends and keeps every engine identical.
+  const STEP_MS = 1000 / 60;
   let raf = 0;
-  let last = performance.now();
   let paused = false;
 
-  const frame = (now: number) => {
+  const frame = () => {
     raf = requestAnimationFrame(frame);
-    if (paused) {
-      last = now;
-      return;
-    }
-    const delta = Math.min(now - last, 32);
-    last = now;
+    if (paused) return;
 
     for (const L of letters) {
       const b = L.body;
-      if (mouseConstraint.body === b) continue; // let the drag own it
+      if (mouseConstraint.body === b) continue; // the drag owns a held glyph
 
-      // Home-spring (force scaled by mass → uniform feel across glyph sizes).
-      Body.applyForce(b, b.position, {
-        x: (L.home.x - b.position.x) * HOME_STIFFNESS * b.mass,
-        y: (L.home.y - b.position.y) * HOME_STIFFNESS * b.mass,
-      });
-      // Ease rotation back toward upright.
+      // Ease rotation back toward upright (the home constraint only pulls the
+      // centre, not the angle).
       Body.setAngularVelocity(b, b.angularVelocity - b.angle * ANGULAR_RETURN);
 
       // Cursor shove.
@@ -291,9 +379,9 @@ function runSimulation(
       }
     }
 
-    Engine.update(engine, delta);
+    Engine.update(engine, STEP_MS);
 
-    // Clamp speed and write transforms.
+    // Clamp speed, ease grab-scale, and write transforms.
     for (const L of letters) {
       const b = L.body;
       const speed = Math.hypot(b.velocity.x, b.velocity.y);
@@ -301,9 +389,11 @@ function runSimulation(
         const s = MAX_SPEED / speed;
         Body.setVelocity(b, { x: b.velocity.x * s, y: b.velocity.y * s });
       }
+      const target = mouseConstraint.body === b ? GRAB_SCALE : 1;
+      L.scale += (target - L.scale) * 0.2;
       L.el.style.transform = `translate(${b.position.x - L.w / 2}px, ${
         b.position.y - L.h / 2
-      }px) rotate(${b.angle}rad)`;
+      }px) rotate(${b.angle}rad) scale(${L.scale})`;
     }
   };
   raf = requestAnimationFrame(frame);
@@ -311,7 +401,6 @@ function runSimulation(
   // --- Pause when hidden or scrolled off-screen ---
   const setPaused = (value: boolean) => {
     paused = value;
-    last = performance.now();
   };
   const onVisibility = () => setPaused(document.hidden);
   document.addEventListener("visibilitychange", onVisibility);
@@ -327,6 +416,8 @@ function runSimulation(
     cancelAnimationFrame(raf);
     container.removeEventListener("pointermove", onPointerMove);
     container.removeEventListener("pointerleave", onPointerLeave);
+    window.removeEventListener("mousemove", mouse.mousemove);
+    window.removeEventListener("mouseup", mouse.mouseup);
     document.removeEventListener("visibilitychange", onVisibility);
     io.disconnect();
     Composite.clear(engine.world, false);
@@ -339,7 +430,9 @@ function runSimulation(
       L.el.style.margin = "";
       L.el.style.transform = "";
       L.el.style.willChange = "";
+      L.el.style.textShadow = "";
       L.el.style.color = "";
+      L.el.style.zIndex = "";
     }
   };
 }
