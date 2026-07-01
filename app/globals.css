@@ -77,26 +77,6 @@ body::before {
   color: #fff;
 }
 
-/* ------------------------------------------------------------------ *
- * Display typography — Fraunces variable axes
- * `opsz` (optical size), `SOFT` (terminal softness), `WONK` (quirk) are
- * requested in app/layout.tsx. High optical size gives the display name its
- * high-contrast serifs; a touch of WONK adds personality to the wordmark and
- * hero. Weight is pinned in the axis string so it can't be reset by the
- * low-level `font-variation-settings` override.
- * ------------------------------------------------------------------ */
-.font-display {
-  font-family: var(--font-serif);
-  font-variation-settings: "opsz" 144, "wght" 500, "SOFT" 0, "WONK" 1;
-  letter-spacing: -0.021em;
-}
-
-.font-title {
-  font-family: var(--font-serif);
-  font-variation-settings: "opsz" 80, "wght" 480, "SOFT" 0, "WONK" 0;
-  letter-spacing: -0.018em;
-}
-
 /* Small uppercase mono label — the site's editorial "index" voice. */
 .eyebrow {
   font-family: var(--font-mono);

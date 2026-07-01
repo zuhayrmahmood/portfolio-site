@@ -24,7 +24,7 @@ export default function AboutPage() {
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-10">
           <Portrait name={site.name} />
           <div>
-            <h1 className="font-title text-[clamp(2.25rem,6vw,3.25rem)] leading-[1.02] text-foreground">
+            <h1 className="font-serif text-4xl font-medium tracking-tight text-foreground sm:text-5xl">
               About
             </h1>
             {/* TODO: replace with your real bio. */}

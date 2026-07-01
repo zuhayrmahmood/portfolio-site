@@ -55,7 +55,7 @@ export default async function PostPage({ params }: PostPageProps) {
           >
             {formatDate(metadata.date)}
           </time>
-          <h1 className="mt-3 font-title text-[clamp(2.25rem,6vw,3.25rem)] leading-[1.05] text-foreground">
+          <h1 className="mt-3 font-serif text-4xl font-medium leading-tight tracking-tight text-foreground sm:text-5xl">
             {metadata.title}
           </h1>
         </header>

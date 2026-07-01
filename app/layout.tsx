@@ -15,10 +15,6 @@ const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
   display: "swap",
-  // Extra variable axes beyond weight, driven by the `.font-display` /
-  // `.font-title` variation-settings in globals.css: optical size (crisp
-  // high-contrast serifs at display sizes), terminal softness, and quirk.
-  axes: ["opsz", "SOFT", "WONK"],
 });
 
 const geistMono = Geist_Mono({

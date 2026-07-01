@@ -104,7 +104,7 @@ export function PhysicsHero() {
       >
         <h1
           aria-label={FULL_NAME}
-          className="font-display text-[clamp(3.25rem,12vw,7.5rem)] leading-[0.9] text-foreground"
+          className="font-serif text-6xl font-medium leading-[0.95] tracking-tight text-foreground sm:text-8xl"
         >
           {LINE_GLYPHS.map((glyphs, li) => (
             <span key={li} className="block whitespace-nowrap">

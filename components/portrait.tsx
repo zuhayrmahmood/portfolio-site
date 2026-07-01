@@ -31,7 +31,7 @@ export function Portrait({ name, className }: PortraitProps) {
         className,
       )}
     >
-      <div className="flex h-full w-full items-center justify-center font-title text-3xl text-accent sm:text-4xl">
+      <div className="flex h-full w-full items-center justify-center font-serif text-3xl font-medium text-accent sm:text-4xl">
         {initials}
       </div>
     </div>

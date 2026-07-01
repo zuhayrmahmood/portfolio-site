@@ -7,7 +7,7 @@ type PageHeaderProps = {
 export function PageHeader({ title, intro }: PageHeaderProps) {
   return (
     <div className="mb-12">
-      <h1 className="font-title text-[clamp(2.25rem,6vw,3.25rem)] leading-[1.02] text-foreground">
+      <h1 className="font-serif text-4xl font-medium tracking-tight text-foreground sm:text-5xl">
         {title}
       </h1>
       {intro && (
