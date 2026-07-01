@@ -85,7 +85,7 @@ export function PhysicsHero() {
   }, [reduceMotion, layoutTick]);
 
   return (
-    <div ref={containerRef} className="relative w-full select-none py-10 sm:py-14">
+    <div ref={containerRef} className="relative w-full select-none py-3 sm:py-4">
       <h1
         aria-label={FULL_NAME}
         className="font-serif text-6xl font-medium leading-[0.95] tracking-tight text-foreground sm:text-8xl"

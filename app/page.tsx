@@ -5,7 +5,7 @@ import { PhysicsHero } from "@/components/physics-hero";
 export default function Home() {
   return (
     <div className="mx-auto w-full max-w-3xl px-6">
-      <section className="flex min-h-[calc(100svh-4rem)] flex-col justify-center py-20">
+      <section className="flex min-h-[calc(78svh-4rem)] flex-col justify-center py-12">
         {/* <Reveal>
           <p className="mb-5 font-mono text-xs uppercase tracking-[0.2em] text-accent">
             Portfolio
