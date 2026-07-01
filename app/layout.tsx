@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/nav";
@@ -30,6 +30,8 @@ export const metadata: Metadata = {
     template: `%s · ${site.name}`,
   },
   description: site.description,
+  authors: [{ name: site.name, url: site.url }],
+  creator: site.name,
   openGraph: {
     title: site.title,
     description: site.description,
@@ -42,6 +44,10 @@ export const metadata: Metadata = {
     title: site.title,
     description: site.description,
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#faf8f4",
 };
 
 export default function RootLayout({

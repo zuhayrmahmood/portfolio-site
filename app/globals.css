@@ -54,6 +54,27 @@ body {
   color: #fff;
 }
 
+/* ------------------------------------------------------------------ *
+ * Page transitions
+ * `app/template.tsx` remounts on navigation, so this animation replays
+ * on every route change. Pure CSS → works without JS; the resting state
+ * is visible, and the reduced-motion rule below disables the motion.
+ * ------------------------------------------------------------------ */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.page-transition {
+  animation: page-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 /* Respect users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html {

@@ -132,8 +132,8 @@ const REPEL_RADIUS = 140; // px around the cursor
 const REPEL_STRENGTH = 0.055; // shove force
 const MAX_SPEED = 26; // velocity clamp (anti-explosion)
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function runSimulation(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Matter: any,
   container: HTMLDivElement,
   spans: (HTMLSpanElement | null)[],
