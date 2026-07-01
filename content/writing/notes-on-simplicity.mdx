@@ -1,0 +1,41 @@
+export const metadata = {
+  title: "Notes on simplicity",
+  date: "2026-05-12",
+  summary:
+    "Simple isn't the same as easy — a few things I keep coming back to when a project starts to sprawl.",
+};
+
+Every project I've worked on has a moment where it wants to get complicated. A new
+feature, an edge case, a clever abstraction — each one reasonable on its own. Simplicity
+is the discipline of noticing that moment and asking whether the complexity is really
+earning its keep.
+
+## Simple is a decision, not a default
+
+Left alone, systems accumulate. The default state of any codebase is *more*: more
+files, more options, more indirection. Staying simple takes active effort — you have
+to keep choosing it.
+
+A few questions I try to ask:
+
+1. Can this be one thing instead of two?
+2. Would a future reader guess how it works without asking me?
+3. If I deleted it, what would actually break?
+
+## Fewer moving parts
+
+The most reliable code is the code that isn't there. Every dependency, config flag,
+and abstraction is a thing that can drift, break, or surprise you later. That doesn't
+mean *never* add them — it means the bar should be high.
+
+> Perfection is achieved not when there is nothing more to add, but when there is
+> nothing left to take away.
+
+That line gets quoted to death, but it's still true. The hard part isn't knowing it —
+it's doing it when the pressure is to just ship the clever version.
+
+## The payoff
+
+Simple things are easier to change, and change is where most of a project's life is
+spent. The upfront restraint pays for itself the first time you come back six months
+later and still understand what you wrote.

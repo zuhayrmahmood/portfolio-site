@@ -1,0 +1,49 @@
+export const metadata = {
+  title: "Building this site",
+  date: "2026-06-28",
+  summary:
+    "Notes on the stack, the physics hero, and what it takes to chase a buttery-smooth feel.",
+};
+
+I wanted a personal site that felt calm to read and a little playful to arrive at.
+Nothing flashy — just something that loads fast, reads well, and has one small moment
+of delight. This post is a quick tour of how it's put together.
+
+## The stack
+
+The whole thing is deliberately boring where it can afford to be, so the interesting
+parts have room to breathe:
+
+- **Next.js** with the App Router, rendered mostly as static HTML
+- **Tailwind** for styling, with a small set of warm-minimal design tokens
+- **Motion** for the scroll reveals you're seeing as you read
+- **Matter.js** for the one bit of physics on the home page
+
+Writing lives in the repo as MDX. Each post is a file that exports its own metadata:
+
+```mdx
+export const metadata = {
+  title: "Building this site",
+  date: "2026-06-28",
+  summary: "…",
+};
+```
+
+That means adding a post is just adding a file — no database, no CMS, no dashboard.
+
+## The hero
+
+The name on the home page is the fun part. Each letter is a real DOM element pinned
+to a physics body, so the text stays crisp and selectable while it wobbles, scatters,
+and springs back toward where it belongs. Drag a letter and it throws; move your cursor
+through and the letters scatter out of the way.
+
+> The trick was making it feel alive without getting in the way. Low gravity, gentle
+> springs, and a hard cap on velocity so it never explodes.
+
+If you'd rather not have the motion, the site respects that: with `prefers-reduced-motion`
+on, the letters simply sit still, and everything else fades in instantly.
+
+## What's next
+
+More writing, mostly. The bones are here — now it's about filling them in.
