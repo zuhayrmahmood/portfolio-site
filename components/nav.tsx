@@ -19,17 +19,22 @@ export function Nav() {
           {site.shortName}
         </Link>
 
-        <ul className="flex items-center gap-0.5 sm:gap-1">
+        <ul className="flex items-center gap-0 sm:gap-1">
           {site.nav.map((item) => {
             const active =
-              pathname === item.href || pathname.startsWith(`${item.href}/`);
+              !item.external &&
+              (pathname === item.href || pathname.startsWith(`${item.href}/`));
 
             return (
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  {...(item.external && {
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                  })}
                   className={cn(
-                    "relative rounded-full px-3 py-1.5 text-sm transition-colors",
+                    "relative rounded-full px-2 py-1.5 text-sm transition-colors sm:px-3",
                     active
                       ? "text-foreground"
                       : "text-muted hover:text-foreground",
@@ -39,7 +44,7 @@ export function Nav() {
                   {active && (
                     <motion.span
                       layoutId="nav-active"
-                      className="absolute inset-x-3 -bottom-px h-px bg-accent"
+                      className="absolute inset-x-2 -bottom-px h-px bg-accent sm:inset-x-3"
                       transition={{ type: "spring", stiffness: 400, damping: 32 }}
                     />
                   )}

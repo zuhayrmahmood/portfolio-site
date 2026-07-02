@@ -15,9 +15,10 @@ export const site = {
 
   // Main navigation (the name on the left links home).
   nav: [
-    { label: "Writing", href: "/writing" },
-    { label: "About", href: "/about" },
-    { label: "Contact", href: "/contact" },
+    { label: "Writing", href: "/writing", external: false },
+    { label: "About", href: "/about", external: false },
+    { label: "Contact", href: "/contact", external: false },
+    { label: "Resume", href: "/ZuhayrResume.pdf", external: true },
   ],
 
   // Social / contact links. Placeholder "#" entries are hidden until you

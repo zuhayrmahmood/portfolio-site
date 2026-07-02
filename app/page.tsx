@@ -18,9 +18,9 @@ export default function Home() {
         <Reveal delay={0.12}>
           <p className="mt-9 max-w-xl text-pretty text-xl leading-relaxed text-muted sm:text-2xl">
             {/* TODO: your one-liner */}
-            I&rsquo;m a <span className="text-foreground">[what you do]</span>.
-            This is where I write, build, and share what I&rsquo;m thinking
-            about.
+            I&rsquo;m a{" "}
+            <span className="text-foreground">[software developer]</span>. This
+            is where I write, build, and share what I&rsquo;m thinking about.
           </p>
         </Reveal>
 
