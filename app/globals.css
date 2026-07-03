@@ -29,10 +29,84 @@
 }
 
 /* ------------------------------------------------------------------ *
+ * Design tokens — "Warm minimal" (dark)
+ * Same roles as the light palette above, inverted: charcoal background,
+ * warm off-white text, terracotta accent brightened for legibility on a
+ * dark ground. Applied via [data-theme="dark"] (components/theme-toggle.tsx
+ * + localStorage) or, absent an explicit choice, the OS preference — so
+ * the page is still correctly themed with JS disabled.
+ * ------------------------------------------------------------------ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-background: #17140f;
+    --color-surface: #201c17;
+    --color-surface-2: #2a2520;
+    --color-foreground: #f2ece2;
+    --color-muted: #b2aaa0;
+    --color-subtle: #7d7668;
+    --color-accent: #d9784c;
+    --color-accent-hover: #ec9a70;
+    --color-accent-soft: #3a2a20;
+    --color-border: #332e27;
+    --color-ground: #423c33;
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.45);
+    --shadow-soft-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --shadow-letter-rest: 0 10px 22px rgba(0, 0, 0, 0.5);
+    --shadow-letter-grab: 0 18px 30px rgba(0, 0, 0, 0.65);
+    --color-paper-glow: rgba(255, 255, 255, 0.05);
+    --grain-blend: overlay;
+    --grain-opacity: 0.05;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-background: #17140f;
+  --color-surface: #201c17;
+  --color-surface-2: #2a2520;
+  --color-foreground: #f2ece2;
+  --color-muted: #b2aaa0;
+  --color-subtle: #7d7668;
+  --color-accent: #d9784c;
+  --color-accent-hover: #ec9a70;
+  --color-accent-soft: #3a2a20;
+  --color-border: #332e27;
+  --color-ground: #423c33;
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-soft-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --shadow-letter-rest: 0 10px 22px rgba(0, 0, 0, 0.5);
+  --shadow-letter-grab: 0 18px 30px rgba(0, 0, 0, 0.65);
+  --color-paper-glow: rgba(255, 255, 255, 0.05);
+  --grain-blend: overlay;
+  --grain-opacity: 0.05;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* ------------------------------------------------------------------ *
  * Base
  * ------------------------------------------------------------------ */
 html {
   scroll-behavior: smooth;
+}
+
+/* Plain custom properties (not @theme) — consumed via var(), either in raw
+ * CSS (paper glow/grain below) or via Tailwind arbitrary values
+ * (shadow-[var(--shadow-soft)] etc., see app/about/page.tsx and friends).
+ * Tailwind v4's shadow-* utility namespace decomposes @theme shadow tokens
+ * into a static color fallback at build time, which would make the dark-mode
+ * override below dead code — so these deliberately stay outside @theme. */
+:root {
+  --color-paper-glow: #ffffff;
+  --grain-blend: multiply;
+  --grain-opacity: 0.04;
+  --shadow-soft: 0 10px 30px rgba(43, 42, 40, 0.06); /* cards */
+  --shadow-soft-lg: 0 10px 30px rgba(43, 42, 40, 0.08); /* portrait */
+  --shadow-letter-rest: 0 10px 22px rgba(43, 42, 40, 0.09); /* hero letters, idle */
+  --shadow-letter-grab: 0 18px 30px rgba(43, 42, 40, 0.18); /* hero letters, held */
 }
 
 body {
@@ -41,7 +115,7 @@ body {
   background-color: var(--color-background);
   background-image: radial-gradient(
     115% 80% at 50% -12%,
-    #ffffff 0%,
+    var(--color-paper-glow) 0%,
     rgba(255, 255, 255, 0) 52%
   );
   background-attachment: fixed;
@@ -60,8 +134,8 @@ body::before {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.04;
-  mix-blend-mode: multiply;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -75,6 +149,57 @@ body::before {
 ::selection {
   background: var(--color-accent);
   color: #fff;
+}
+
+/* ------------------------------------------------------------------ *
+ * Theme toggle
+ * Sun/moon crossfade keyed purely off the [data-theme] attribute (see
+ * components/theme-toggle.tsx), so it's already correct on first paint —
+ * no client JS state needed to decide which icon shows.
+ * ------------------------------------------------------------------ */
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  height: 2.25rem;
+  width: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  color: var(--color-muted);
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  color: var(--color-foreground);
+  background-color: var(--color-surface-2);
+}
+
+.theme-toggle-icon {
+  position: absolute;
+  transition: opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.theme-toggle-icon-moon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+:root[data-theme="dark"] .theme-toggle-icon-sun {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+
+:root[data-theme="dark"] .theme-toggle-icon-moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* No-JS visitors can't toggle (no client script to run), so don't show a
+ * dead button. The inline theme script in app/layout.tsx adds `.js` to
+ * <html> the moment it runs, before first paint. */
+:root:not(.js) .theme-toggle {
+  display: none;
 }
 
 /* Small uppercase mono label — the site's editorial "index" voice. */
@@ -167,6 +292,17 @@ body::before {
   .hero-hint {
     display: none;
   }
+}
+
+/* Ease color-only properties globally so toggling dark mode reads as a
+ * cross-fade rather than a hard cut. Zero-specificity selector, so any
+ * element with its own transition utility (e.g. nav links' transition-colors)
+ * keeps using that instead. */
+*,
+*::before,
+*::after {
+  transition: background-color 0.25s ease, border-color 0.25s ease,
+    color 0.25s ease, fill 0.25s ease;
 }
 
 /* Respect users who prefer reduced motion */

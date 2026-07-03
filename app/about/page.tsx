@@ -67,7 +67,7 @@ export default function AboutPage() {
 
       {/* Contact CTA */}
       <Reveal delay={0.12}>
-        <section className="mt-16 rounded-2xl border border-border bg-surface p-8 shadow-[0_10px_30px_rgba(43,42,40,0.06)]">
+        <section className="mt-16 rounded-2xl border border-border bg-surface p-8 shadow-[var(--shadow-soft)]">
           <p className="text-lg text-foreground">
             Have an idea, a role, or just want to say hi?
           </p>

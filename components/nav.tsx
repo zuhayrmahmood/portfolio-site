@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export function Nav() {
   const pathname = usePathname();
@@ -19,40 +20,48 @@ export function Nav() {
           {site.shortName}
         </Link>
 
-        <ul className="flex items-center gap-0 sm:gap-1">
-          {site.nav.map((item) => {
-            const active =
-              !item.external &&
-              (pathname === item.href || pathname.startsWith(`${item.href}/`));
+        <div className="flex items-center gap-1 sm:gap-2">
+          <ul className="flex items-center gap-0 sm:gap-1">
+            {site.nav.map((item) => {
+              const active =
+                !item.external &&
+                (pathname === item.href ||
+                  pathname.startsWith(`${item.href}/`));
 
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  {...(item.external && {
-                    target: "_blank",
-                    rel: "noopener noreferrer",
-                  })}
-                  className={cn(
-                    "relative rounded-full px-2 py-1.5 text-sm transition-colors sm:px-3",
-                    active
-                      ? "text-foreground"
-                      : "text-muted hover:text-foreground",
-                  )}
-                >
-                  {item.label}
-                  {active && (
-                    <motion.span
-                      layoutId="nav-active"
-                      className="absolute inset-x-2 -bottom-px h-px bg-accent sm:inset-x-3"
-                      transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                    />
-                  )}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    {...(item.external && {
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                    })}
+                    className={cn(
+                      "relative rounded-full px-2 py-1.5 text-sm transition-colors sm:px-3",
+                      active
+                        ? "text-foreground"
+                        : "text-muted hover:text-foreground",
+                    )}
+                  >
+                    {item.label}
+                    {active && (
+                      <motion.span
+                        layoutId="nav-active"
+                        className="absolute inset-x-2 -bottom-px h-px bg-accent sm:inset-x-3"
+                        transition={{
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 32,
+                        }}
+                      />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+          <ThemeToggle />
+        </div>
       </nav>
     </header>
   );

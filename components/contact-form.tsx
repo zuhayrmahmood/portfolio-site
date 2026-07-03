@@ -68,7 +68,7 @@ export function ContactForm() {
     return (
       <div
         role="status"
-        className="rounded-2xl border border-border bg-surface p-8 shadow-[0_10px_30px_rgba(43,42,40,0.06)]"
+        className="rounded-2xl border border-border bg-surface p-8 shadow-[var(--shadow-soft)]"
       >
         <p className="text-lg text-foreground">
           Thanks — your message is on its way.

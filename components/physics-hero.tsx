@@ -172,8 +172,11 @@ const GRAB_SCALE = 1.08; // pop the held glyph
 // don't push each other off home when idle — they only collide during play.
 const BODY_W = 0.82;
 const BODY_H = 0.64;
-const REST_SHADOW = "0 10px 22px rgba(43, 42, 40, 0.09)";
-const GRAB_SHADOW = "0 18px 30px rgba(43, 42, 40, 0.18)";
+// Values live in app/globals.css (--shadow-letter-rest/-grab) so they pick
+// up the dark-mode override automatically — var() resolves live against the
+// cascade, no theme-awareness needed here.
+const REST_SHADOW = "var(--shadow-letter-rest)";
+const GRAB_SHADOW = "var(--shadow-letter-grab)";
 
 function runSimulation(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -262,6 +265,12 @@ function runSimulation(
     L.el.style.top = "0px";
     L.el.style.margin = "0";
     L.el.style.willChange = "transform";
+    // Every visual property here (position, shadow, the accent color on
+    // grab) is already synced to the physics loop imperatively, frame by
+    // frame — the global color-transition rule in globals.css would
+    // otherwise ease the grab highlight 250ms behind the instant
+    // transform/scale pop, a visible desync during drag.
+    L.el.style.transition = "none";
     L.el.style.textShadow = REST_SHADOW;
     L.el.style.transform = `translate(${body.position.x - L.w / 2}px, ${
       body.position.y - L.h / 2
@@ -430,6 +439,7 @@ function runSimulation(
       L.el.style.margin = "";
       L.el.style.transform = "";
       L.el.style.willChange = "";
+      L.el.style.transition = "";
       L.el.style.textShadow = "";
       L.el.style.color = "";
       L.el.style.zIndex = "";
