@@ -31,14 +31,16 @@ export default function AboutPage() {
             <div className="mt-5 space-y-4 text-lg leading-relaxed text-muted">
               <p>
                 I&rsquo;m Zuhayr — a{" "}
-                <span className="text-foreground">[role]</span> based in{" "}
-                <span className="text-foreground">[place]</span>, where I spend
-                my time <span className="text-foreground">[what you do]</span>.
+                <span className="text-foreground">software developer</span>{" "}
+                based in <span className="text-foreground">montreal</span>,
+                where I spend my time{" "}
+                <span className="text-foreground">[what you do]</span>.
               </p>
               <p>
-                This is placeholder text. Say a little about your story: what you
-                build, what you&rsquo;re curious about, and what you&rsquo;re
-                working toward. A couple of short paragraphs is plenty.
+                This is placeholder text. Say a little about your story: what
+                you build, what you&rsquo;re curious about, and what
+                you&rsquo;re working toward. A couple of short paragraphs is
+                plenty.
               </p>
             </div>
           </div>

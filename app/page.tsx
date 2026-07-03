@@ -6,10 +6,6 @@ export default function Home() {
   return (
     <div className="mx-auto w-full max-w-3xl px-6">
       <section className="flex min-h-[calc(82svh-4rem)] flex-col justify-center py-16">
-        <Reveal>
-          <p className="eyebrow mb-6 text-accent">Personal site</p>
-        </Reveal>
-
         {/* Interactive Matter.js hero — grab, fling, and scatter the letters;
             they spring back into the name. Falls back to a static name for
             reduced-motion / no-JS / touch. */}
