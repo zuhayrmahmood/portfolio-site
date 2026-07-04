@@ -47,8 +47,8 @@ export function ThemeToggle() {
         strokeWidth="1.75"
         strokeLinecap="round"
         strokeLinejoin="round"
-        width="18"
-        height="18"
+        width="16"
+        height="16"
         className="theme-toggle-icon theme-toggle-icon-sun"
       >
         <circle cx="12" cy="12" r="4" />
@@ -62,8 +62,8 @@ export function ThemeToggle() {
         strokeWidth="1.75"
         strokeLinecap="round"
         strokeLinejoin="round"
-        width="18"
-        height="18"
+        width="16"
+        height="16"
         className="theme-toggle-icon theme-toggle-icon-moon"
       >
         <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z" />

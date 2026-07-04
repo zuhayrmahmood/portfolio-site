@@ -160,8 +160,9 @@ body::before {
 .theme-toggle {
   position: relative;
   display: inline-flex;
-  height: 2.25rem;
-  width: 2.25rem;
+  height: 2rem;
+  width: 2rem;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
@@ -199,6 +200,19 @@ body::before {
  * dead button. The inline theme script in app/layout.tsx adds `.js` to
  * <html> the moment it runs, before first paint. */
 :root:not(.js) .theme-toggle {
+  display: none;
+}
+
+/* Fallback for the nav row on very narrow viewports where the logo + links +
+ * toggle don't all fit: scrolls internally instead of overflowing the whole
+ * page and pushing content off-screen unreachably. Invisible in the common
+ * case where everything already fits. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 

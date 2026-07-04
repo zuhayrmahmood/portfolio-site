@@ -15,12 +15,17 @@ export function Nav() {
       <nav className="mx-auto flex h-16 w-full max-w-3xl items-center justify-between px-6">
         <Link
           href="/"
-          className="font-serif text-lg font-medium tracking-tight text-foreground transition-opacity hover:opacity-70"
+          className="shrink-0 font-serif text-lg font-medium tracking-tight text-foreground transition-opacity hover:opacity-70"
         >
           {site.shortName}
         </Link>
 
-        <div className="flex items-center gap-1 sm:gap-2">
+        {/* min-w-0 lets this row shrink below its content's natural width
+            inside the flex nav (the default min-width:auto would otherwise
+            force the whole page wider); no-scrollbar + overflow-x-auto is a
+            fallback so a future addition or a very narrow device degrades to
+            an internal swipe instead of silently pushing content off-screen. */}
+        <div className="no-scrollbar flex min-w-0 items-center gap-0.5 overflow-x-auto sm:gap-2">
           <ul className="flex items-center gap-0 sm:gap-1">
             {site.nav.map((item) => {
               const active =
@@ -37,7 +42,7 @@ export function Nav() {
                       rel: "noopener noreferrer",
                     })}
                     className={cn(
-                      "relative rounded-full px-2 py-1.5 text-sm transition-colors sm:px-3",
+                      "relative rounded-full px-1.5 py-1.5 text-sm transition-colors sm:px-3",
                       active
                         ? "text-foreground"
                         : "text-muted hover:text-foreground",
