@@ -1,7 +1,7 @@
 # zuhayrmahmood.me
 
 Personal site of Zuhayr Mahmood — a calm, fast portfolio with an interactive
-physics hero, an in-repo MDX writing section, and a working contact form.
+physics hero, and in-repo MDX writing + projects sections.
 
 ## Tech stack
 
@@ -9,8 +9,7 @@ physics hero, an in-repo MDX writing section, and a working contact form.
 - **[Tailwind CSS v4](https://tailwindcss.com)** — CSS-first `@theme` tokens (no `tailwind.config`)
 - **[Motion](https://motion.dev)** — scroll reveals
 - **[Matter.js](https://brm.io/matter-js/)** — the cursor-driven physics hero
-- **[@next/mdx](https://www.npmjs.com/package/@next/mdx)** — writing posts as `.mdx` files
-- **[Resend](https://resend.com)** — contact-form email delivery
+- **[@next/mdx](https://www.npmjs.com/package/@next/mdx)** — writing posts + projects as `.mdx` files
 - Deployed on **[Vercel](https://vercel.com)**
 
 ## Prerequisites
@@ -50,16 +49,17 @@ app/
   page.tsx              Home (physics hero)
   about/                About page
   writing/              Writing index + [slug] post pages
-  contact/              Contact page (form + social links)
-  api/contact/route.ts  Contact form endpoint (Resend)
+  projects/             Projects index + [slug] project pages
   opengraph-image.tsx   Generated OG / social preview image
   icon.svg, apple-icon.tsx, sitemap.ts, robots.ts, manifest.ts
-components/             Nav, Footer, Reveal, PhysicsHero, ContactForm, …
-content/writing/        Blog posts as .mdx
+components/             Nav, Footer, Reveal, PhysicsHero, …
+content/
+  writing/              Blog posts as .mdx
+  projects/             Projects as .mdx
 lib/
   site.ts               Central config: name, nav, socials, URL
   writing.ts            Reads/loads MDX posts
-  contact.ts            Shared form validation
+  projects.ts           Reads/loads MDX projects
 mdx-components.tsx      Maps markdown elements to the design system
 ```
 
@@ -82,6 +82,27 @@ Write in **Markdown** — headings, lists, `code`, > quotes, tables, and even
 React components are all supported.
 ```
 
+## Adding a project
+
+Add a `.mdx` file to `content/projects/`, same as a writing post, plus a
+couple of project-specific fields:
+
+```mdx
+export const metadata = {
+  title: "My project",
+  date: "2026-07-01",
+  summary: "A one-line description for the index and link previews.",
+  stack: ["Next.js", "Postgres"], // optional — shown as chips
+  href: "https://example.com", // optional — live URL
+  repo: "https://github.com/you/example", // optional — source URL
+};
+
+Write the case study the same way you'd write a post.
+```
+
+`content/projects/example-project.mdx` is a placeholder demonstrating the
+shape — replace it with a real project or delete it.
+
 ## Configuration
 
 Most personalization lives in **`lib/site.ts`**: your name, nav items, and
@@ -94,39 +115,12 @@ automatically hidden until you fill them in.
 - **Bio / About copy:** edit `app/about/page.tsx` (bracketed `[…]` placeholders).
 - **Colors / fonts:** design tokens are in `app/globals.css` (`@theme`).
 
-## Contact form (Resend)
-
-The form at `/contact` posts to `app/api/contact/route.ts`, which sends email via
-Resend. Without configuration it fails gracefully (it tells visitors to use the
-social links instead), so nothing breaks before you set it up.
-
-1. Copy the env template and create a key at [resend.com/api-keys](https://resend.com/api-keys):
-
-   ```bash
-   cp .env.example .env.local
-   ```
-
-2. Fill in `.env.local`:
-
-   | Variable             | Purpose                                                        |
-   | -------------------- | -------------------------------------------------------------- |
-   | `RESEND_API_KEY`     | Required to send. From the Resend dashboard.                   |
-   | `CONTACT_TO_EMAIL`   | Where submissions are delivered.                               |
-   | `CONTACT_FROM_EMAIL` | The "From" address — must be on a Resend-verified domain.      |
-
-   For real delivery, [verify your domain](https://resend.com/domains) in Resend
-   and set `CONTACT_FROM_EMAIL` to an address on it (e.g.
-   `"Zuhayr Mahmood <contact@zuhayrmahmood.me>"`). The default
-   `onboarding@resend.dev` only delivers test sends to your own account email.
-
 ## Deployment (Vercel)
 
 Next.js on Vercel is zero-config.
 
 1. Push this repo to GitHub and **Import** it at [vercel.com/new](https://vercel.com/new).
-2. Add the three environment variables above under **Settings → Environment
-   Variables** (Production).
-3. Deploy.
+2. Deploy.
 
 ### Custom domain
 
@@ -142,5 +136,5 @@ metadata, Open Graph URLs, the sitemap, and `robots.txt`.
 - [ ] Real bio in `app/about/page.tsx` and the "Currently" list
 - [ ] Real social links in `lib/site.ts` (LinkedIn / X are placeholders)
 - [ ] Optional: a real `public/portrait.jpg`
-- [ ] Resend API key + verified domain for the contact form
+- [ ] Replace `content/projects/example-project.mdx` with real projects
 - [ ] Add `zuhayrmahmood.me` in Vercel and point DNS

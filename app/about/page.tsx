@@ -34,7 +34,10 @@ export default function AboutPage() {
                 <span className="text-foreground">software developer</span>{" "}
                 based in <span className="text-foreground">montreal</span>,
                 where I spend my time{" "}
-                <span className="text-foreground">[what you do]</span>.
+                <span className="text-foreground">
+                  playing basketball, building software and reading books
+                </span>
+                .
               </p>
               <p>
                 This is placeholder text. Say a little about your story: what
@@ -72,7 +75,7 @@ export default function AboutPage() {
             Have an idea, a role, or just want to say hi?
           </p>
           <Link
-            href="/contact"
+            href="mailto:zuhayrmahmood01@gmail.com"
             className="group mt-5 inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-accent px-6 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md"
           >
             Get in touch
