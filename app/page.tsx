@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { PhysicsHero } from "@/components/physics-hero";
+import { TypingText } from "@/components/typing-text";
 
 export default function Home() {
   return (
@@ -13,10 +14,8 @@ export default function Home() {
 
         <Reveal delay={0.12}>
           <p className="mt-9 max-w-xl text-pretty text-xl leading-relaxed text-muted sm:text-2xl">
-            {/* TODO: your one-liner */}
-            I&rsquo;m a{" "}
-            <span className="text-foreground">[software developer]</span>. This
-            is where I write, build, and share what I&rsquo;m thinking about.
+            I&rsquo;m a <TypingText />. This is where I write, build, and
+            share what I&rsquo;m thinking about.
           </p>
         </Reveal>
 
@@ -30,12 +29,6 @@ export default function Home() {
               <span className="transition-transform duration-200 group-hover:translate-x-0.5">
                 →
               </span>
-            </Link>
-            <Link
-              href="/about"
-              className="inline-flex h-11 items-center justify-center rounded-full border border-border bg-surface/60 px-6 text-sm font-medium text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface-2"
-            >
-              About me
             </Link>
           </div>
         </Reveal>
