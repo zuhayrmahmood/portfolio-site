@@ -30,7 +30,7 @@ export default function OpengraphImage() {
             fontSize: 28,
             fontWeight: 600,
             letterSpacing: 10,
-            color: "#c0663f",
+            color: "#3d84b8",
           }}
         >
           PORTFOLIO
@@ -67,7 +67,7 @@ export default function OpengraphImage() {
               display: "flex",
               width: 72,
               height: 6,
-              background: "#c0663f",
+              background: "#3d84b8",
               borderRadius: 3,
             }}
           />
