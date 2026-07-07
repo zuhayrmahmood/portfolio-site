@@ -14,18 +14,18 @@ export default function Home() {
 
         <Reveal delay={0.12}>
           <p className="mt-9 max-w-xl text-pretty text-xl leading-relaxed text-muted sm:text-2xl">
-            I&rsquo;m a <TypingText />. This is where I write, build, and
-            share what I&rsquo;m thinking about.
+            I&rsquo;m a <TypingText />. This is where I write, build, and share
+            what I&rsquo;m thinking about.
           </p>
         </Reveal>
 
         <Reveal delay={0.18}>
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
-              href="/writing"
+              href="/about"
               className="group inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-accent px-6 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md"
             >
-              Read my writing
+              about me
               <span className="transition-transform duration-200 group-hover:translate-x-0.5">
                 →
               </span>

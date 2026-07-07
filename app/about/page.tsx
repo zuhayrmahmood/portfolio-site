@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 
 // TODO: edit these to reflect what you're currently up to.
 const currently = [
-  { label: "Building", value: "[banking associate AI advisor]" },
-  { label: "Reading", value: "[a book or two]" },
+  { label: "Building", value: "[a lean angle sensor]" },
+  { label: "Reading", value: "[dune by frank herbert]" },
   { label: "Based in", value: "[montreal]" },
 ];
 
@@ -30,12 +30,12 @@ export default function AboutPage() {
             {/* TODO: replace with your real bio. */}
             <div className="mt-5 space-y-4 text-lg leading-relaxed text-muted">
               <p>
-                Hey! I&rsquo;m Zuhayr, a{" "}
+                hey! i&rsquo;m zuhayr, a{" "}
                 <span className="text-foreground">software developer</span>{" "}
                 based in <span className="text-foreground">montreal</span>,
                 where I spend my time{" "}
                 <span className="text-foreground">
-                  playing basketball, building software and reading books
+                  playing basketball, building software and riding motorcycles
                 </span>
                 .
               </p>
