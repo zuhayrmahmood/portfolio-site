@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 // TODO: edit these to reflect what you're currently up to.
 const currently = [
   { label: "Building", value: "[a lean angle sensor]" },
-  { label: "Reading", value: "[dune by frank herbert]" },
-  { label: "Based in", value: "[montreal]" },
+  { label: "Reading", value: "[Dune by Frank Herbert]" },
+  { label: "Based in", value: "[Montreal]" },
 ];
 
 export default function AboutPage() {
@@ -30,9 +30,9 @@ export default function AboutPage() {
             {/* TODO: replace with your real bio. */}
             <div className="mt-5 space-y-4 text-lg leading-relaxed text-muted">
               <p>
-                hey! i&rsquo;m zuhayr, a{" "}
+                Hey! I&rsquo;m Zuhayr, a{" "}
                 <span className="text-foreground">software developer</span>{" "}
-                based in <span className="text-foreground">montreal</span>,
+                based in <span className="text-foreground">Montreal</span>,
                 where I spend my time{" "}
                 <span className="text-foreground">
                   playing basketball, building software and riding motorcycles
@@ -40,10 +40,16 @@ export default function AboutPage() {
                 .
               </p>
               <p>
-                This is placeholder text. Say a little about your story: what
-                you build, what you&rsquo;re curious about, and what
-                you&rsquo;re working toward. A couple of short paragraphs is
-                plenty.
+                I recently graduated from{" "}
+                <span className="text-foreground">McGill University </span> with
+                a degree in{" "}
+                <span className="text-foreground">Computer Science</span>.
+                During my time at McGill, I was fortunate enough to complete{" "}
+                <span className="text-foreground">Computer Science</span>
+                four internships: three at an AI company and one at a
+                hedge-fund. Currently, I work as a software developer where
+                I&rsquo;m exploring AI applications for traditional telephony
+                platforms.
               </p>
             </div>
           </div>
@@ -72,13 +78,10 @@ export default function AboutPage() {
       <Reveal delay={0.12}>
         <section className="mt-16 rounded-2xl border border-border bg-surface p-8 shadow-[var(--shadow-soft)]">
           <p className="text-lg text-foreground">
-            Have an idea, a role, or just want to say hi?
+            want to reach out or just want to say hi?
           </p>
-          <ObfuscatedEmail
-            subject="Hello from your site"
-            className="group mt-5 inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-accent px-6 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md"
-          >
-            Get in touch
+          <ObfuscatedEmail className="group mt-5 inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-accent px-6 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md">
+            get in touch
             <span className="transition-transform duration-200 group-hover:translate-x-0.5">
               →
             </span>
