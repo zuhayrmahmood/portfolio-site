@@ -90,6 +90,15 @@
  * Base
  * ------------------------------------------------------------------ */
 html {
+  /* Proportional zoom: the whole rem-based UI (type, spacing, gutters, and
+   * column widths are all rem) scales with the viewport, capped at both ends.
+   * Because text and column grow together, characters-per-line stays constant,
+   * so readability is preserved at every size. rem terms (not pure vw) keep
+   * browser/OS font-size and text-only zoom preferences respected (WCAG 1.4.4).
+   * Roughly: <=1200px -> 16px (today's look), 1920px -> ~19.6px,
+   * >=2400px -> 22px cap. Tailwind's `sm` breakpoint is unaffected (media
+   * queries resolve rem against the initial font size, not :root). */
+  font-size: clamp(1rem, 0.625rem + 0.5vw, 1.375rem);
   scroll-behavior: smooth;
 }
 
