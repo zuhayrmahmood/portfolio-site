@@ -1,4 +1,7 @@
+import { ObfuscatedEmail } from "@/components/obfuscated-email";
 import { site } from "@/lib/site";
+
+const LINK_CLASS = "text-muted transition-colors hover:text-accent";
 
 export function Footer() {
   const links = site.socials.filter((s) => s.href !== "#");
@@ -12,14 +15,20 @@ export function Footer() {
         <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
           {links.map((s) => (
             <li key={s.label}>
-              <a
-                href={s.href}
-                target={s.href.startsWith("http") ? "_blank" : undefined}
-                rel="noreferrer"
-                className="text-muted transition-colors hover:text-accent"
-              >
-                {s.label}
-              </a>
+              {s.href === "email" ? (
+                <ObfuscatedEmail className={LINK_CLASS}>
+                  {s.label}
+                </ObfuscatedEmail>
+              ) : (
+                <a
+                  href={s.href}
+                  target={s.href.startsWith("http") ? "_blank" : undefined}
+                  rel="noreferrer"
+                  className={LINK_CLASS}
+                >
+                  {s.label}
+                </a>
+              )}
             </li>
           ))}
         </ul>

@@ -24,7 +24,11 @@ export const site = {
   // Social / contact links. Placeholder "#" entries are hidden until you
   // fill them in — replace the URLs (or delete any you don't use).
   socials: [
-    { label: "Email", href: "mailto:zuhayrmahmood01@gmail.com" },
+    // "email" is a sentinel — the real address is never stored in plain text
+    // here (this file is bundled into the client). It's rendered via
+    // <ObfuscatedEmail>, which assembles the mailto on the client. See
+    // components/obfuscated-email.tsx.
+    { label: "Email", href: "email" },
     { label: "GitHub", href: "https://github.com/zuhayrmahmood" },
     { label: "LinkedIn", href: "#" }, // TODO
     { label: "X", href: "#" }, // TODO

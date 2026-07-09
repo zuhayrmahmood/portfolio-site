@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { ObfuscatedEmail } from "@/components/obfuscated-email";
 import { Portrait } from "@/components/portrait";
 import { Reveal } from "@/components/reveal";
 import { site } from "@/lib/site";
@@ -74,15 +74,15 @@ export default function AboutPage() {
           <p className="text-lg text-foreground">
             Have an idea, a role, or just want to say hi?
           </p>
-          <Link
-            href="mailto:zuhayrmahmood01@gmail.com"
+          <ObfuscatedEmail
+            subject="Hello from your site"
             className="group mt-5 inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-accent px-6 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md"
           >
             Get in touch
             <span className="transition-transform duration-200 group-hover:translate-x-0.5">
               →
             </span>
-          </Link>
+          </ObfuscatedEmail>
         </section>
       </Reveal>
     </div>

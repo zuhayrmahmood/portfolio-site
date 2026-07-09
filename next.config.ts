@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   // HMR websocket) from any host other than localhost — allowlist the LAN
   // IP so testing from a phone on the same WiFi works. Dev-only; has no
   // effect on production builds.
-  allowedDevOrigins: ["192.168.2.224", "10.0.0.119"],
+  allowedDevOrigins: ["192.168.2.224", "192.168.18.14"],
 };
 
 const withMDX = createMDX({
