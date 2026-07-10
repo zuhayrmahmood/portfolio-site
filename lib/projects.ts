@@ -40,12 +40,17 @@ type ProjectModule = {
 
 const PROJECTS_DIR = path.join(process.cwd(), "content/projects");
 
-/** All project slugs (filenames without the `.mdx` extension). */
+/**
+ * All project slugs (filenames without the `.mdx` extension).
+ *
+ * Files whose name starts with `draft` are excluded from the site but kept in
+ * the repo — prefix a file with `draft` to hide a work-in-progress project.
+ */
 export function getProjectSlugs(): string[] {
   if (!fs.existsSync(PROJECTS_DIR)) return [];
   return fs
     .readdirSync(PROJECTS_DIR)
-    .filter((file) => file.endsWith(".mdx"))
+    .filter((file) => file.endsWith(".mdx") && !file.startsWith("draft"))
     .map((file) => file.replace(/\.mdx$/, ""));
 }
 

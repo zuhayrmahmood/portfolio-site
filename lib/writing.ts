@@ -33,12 +33,17 @@ type PostModule = {
 
 const POSTS_DIR = path.join(process.cwd(), "content/writing");
 
-/** All post slugs (filenames without the `.mdx` extension). */
+/**
+ * All post slugs (filenames without the `.mdx` extension).
+ *
+ * Files whose name starts with `draft` are excluded from the site but kept in
+ * the repo — prefix a file with `draft` to hide a work-in-progress post.
+ */
 export function getPostSlugs(): string[] {
   if (!fs.existsSync(POSTS_DIR)) return [];
   return fs
     .readdirSync(POSTS_DIR)
-    .filter((file) => file.endsWith(".mdx"))
+    .filter((file) => file.endsWith(".mdx") && !file.startsWith("draft"))
     .map((file) => file.replace(/\.mdx$/, ""));
 }
 
