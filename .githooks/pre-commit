@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+#
+# pre-commit — auto-convert any staged JPEG/PNG to WebP before it lands.
+#
+# Whenever you `git add` an image and commit, this converts it to a smaller
+# .webp, deletes the heavy original, and swaps the .webp into the same commit.
+# You don't have to do anything — just remember to reference images as `.webp`
+# in your posts/components, since that's the filename that ends up in the repo.
+#
+# Enabled automatically via `npm install` (see the "prepare" script in
+# package.json, which points git at this folder). Needs: brew install webp
+
+set -euo pipefail
+
+repo_root=$(git rev-parse --show-toplevel)
+
+# Staged, added/copied/modified files with a raster image extension.
+staged=$(git diff --cached --name-only --diff-filter=ACM \
+  | grep -iE '\.(jpe?g|png)$' || true)
+
+[ -z "$staged" ] && exit 0
+
+if ! command -v cwebp >/dev/null 2>&1; then
+  echo "pre-commit: staged images need converting but 'cwebp' is missing." >&2
+  echo "            Install it with:  brew install webp" >&2
+  exit 1
+fi
+
+echo "$staged" | while IFS= read -r file; do
+  [ -z "$file" ] && continue
+  webp="${file%.*}.webp"
+
+  "$repo_root/scripts/webpify.sh" "$repo_root/$file"
+
+  # Swap the original out of the commit and the new .webp in.
+  git rm --cached --quiet -- "$file" 2>/dev/null || true
+  git add -- "$webp"
+done
+
+echo "pre-commit: images converted to WebP and staged."

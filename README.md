@@ -115,6 +115,38 @@ automatically hidden until you fill them in.
 - **Bio / About copy:** edit `app/about/page.tsx` (bracketed `[…]` placeholders).
 - **Colors / fonts:** design tokens are in `app/globals.css` (`@theme`).
 
+## Images (auto-WebP)
+
+Images are compressed to [WebP](https://developers.google.com/speed/webp)
+automatically so the repo stays small and pages load fast. A git pre-commit
+hook (`.githooks/pre-commit`) converts any JPEG/PNG you commit into a smaller
+`.webp`, deletes the heavy original, and swaps the `.webp` into the commit.
+
+**One-time setup** (per machine):
+
+```bash
+brew install webp   # the encoder the hook calls
+npm install         # enables the hook (runs `git config core.hooksPath .githooks`)
+```
+
+**Day-to-day:** drop an image in `public/`, `git add` it, and commit — the WebP
+conversion happens invisibly.
+
+**The one rule:** reference images with a **`.webp`** extension, because that's
+the filename that ends up in the repo. In an MDX post that's
+`![alt](/my-photo.webp)`; in a component, `<Image src="/my-photo.webp" />`.
+
+To preview locally *before* committing (so the `.webp` exists for `npm run dev`),
+convert on demand:
+
+```bash
+npm run webpify public/my-photo.jpg   # -> public/my-photo.webp, original removed
+```
+
+Quality defaults to 80 (visually lossless for photos); override with
+`WEBP_QUALITY=90 npm run webpify …`. Keep your full-resolution masters somewhere
+outside the repo — the workflow discards the originals it converts.
+
 ## Deployment (Vercel)
 
 Next.js on Vercel is zero-config.
