@@ -126,6 +126,31 @@ const components: MDXComponents = {
       {...props}
     />
   ),
+  // Photo with a caption. Use in MDX instead of the `![](…)` markdown image
+  // syntax when you want a caption:
+  //   <Figure src="/ninja-650.jpg" alt="…" caption="…" />
+  // `alt` is for screen readers/SEO; `caption` is the visible line under it.
+  Figure: ({
+    src,
+    alt = "",
+    caption,
+    ...props
+  }: ComponentPropsWithoutRef<"img"> & { caption?: string }) => (
+    <figure className="my-6">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt}
+        className="w-full rounded-xl border border-border"
+        {...props}
+      />
+      {caption ? (
+        <figcaption className="mt-3 text-center text-sm leading-relaxed text-subtle italic">
+          {caption}
+        </figcaption>
+      ) : null}
+    </figure>
+  ),
 };
 
 export function useMDXComponents(): MDXComponents {
