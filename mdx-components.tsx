@@ -1,6 +1,7 @@
 import type { MDXComponents } from "mdx/types";
 import type { ComponentPropsWithoutRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 /**
  * Global MDX element → component mapping.
@@ -118,13 +119,85 @@ const components: MDXComponents = {
   td: (props) => (
     <td className="border-b border-border py-2 pr-4 text-muted" {...props} />
   ),
-  img: ({ alt = "", ...props }: ComponentPropsWithoutRef<"img">) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      alt={alt}
-      className="my-6 w-full rounded-xl border border-border"
-      {...props}
-    />
+  img: ({ alt = "", src, width, height }: ComponentPropsWithoutRef<"img">) => {
+    // `rehype-img-size` (see next.config.ts) stamps intrinsic width/height onto
+    // images it can measure in `public/`. When present, hand them to next/image
+    // for resizing, WebP, responsive srcset, lazy-loading, and zero layout shift
+    // (`h-auto` keeps the aspect ratio while the image scales to the column).
+    // Posts render inside a `max-w-2xl` (672px) article, hence the `sizes` hint.
+    if (typeof src === "string" && width && height) {
+      return (
+        <Image
+          src={src}
+          alt={alt}
+          width={Number(width)}
+          height={Number(height)}
+          sizes="(max-width: 768px) 100vw, 672px"
+          // Animated GIFs (and SVGs) must skip optimization or next/image can
+          // strip the animation / rasterize them — serve the file as-is.
+          unoptimized={/\.(gif|svg)$/i.test(src)}
+          className="my-6 h-auto w-full rounded-xl border border-border"
+        />
+      );
+    }
+    // Fallback for images the plugin couldn't measure (external URLs, SVGs):
+    // render a plain <img> so the post still works.
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        alt={alt}
+        src={src}
+        className="my-6 w-full rounded-xl border border-border"
+      />
+    );
+  },
+  // Photo with a visible caption. Use in MDX when you want a caption under an
+  // image; plain `![alt](src)` markdown still works for the caption-less case.
+  //   <Figure
+  //     src="/writing/ninja-650.webp"
+  //     alt="Describes the image for screen readers / SEO"
+  //     caption="The line shown under the photo"
+  //     width={3024}
+  //     height={3214}
+  //   />
+  // Pass the image's intrinsic `width`/`height` (pixels) to get the same
+  // next/image optimization the `img` override gives markdown images —
+  // rehype-img-size can't stamp them onto a JSX component the way it does for
+  // `![](…)`. Without them it falls back to a plain <img>, still captioned.
+  Figure: ({
+    src,
+    alt = "",
+    caption,
+    width,
+    height,
+  }: ComponentPropsWithoutRef<"img"> & { caption?: string }) => (
+    <figure className="my-6">
+      {typeof src === "string" && width && height ? (
+        <Image
+          src={src}
+          alt={alt}
+          width={Number(width)}
+          height={Number(height)}
+          sizes="(max-width: 768px) 100vw, 672px"
+          // See the `img` override: keep GIFs/SVGs unoptimized so animation
+          // survives.
+          unoptimized={/\.(gif|svg)$/i.test(src)}
+          className="h-auto w-full rounded-xl border border-border"
+        />
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={src}
+          alt={alt}
+          className="w-full rounded-xl border border-border"
+        />
+      )}
+      {caption ? (
+        <figcaption className="mt-3 text-center text-sm leading-relaxed text-subtle italic">
+          {caption}
+        </figcaption>
+      ) : null}
+    </figure>
   ),
 };
 

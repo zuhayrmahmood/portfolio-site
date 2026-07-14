@@ -45,7 +45,7 @@ export default function AboutPage() {
                 a degree in{" "}
                 <span className="text-foreground">Computer Science</span>.
                 During my time at McGill, I was fortunate enough to complete{" "}
-                <span className="text-foreground">Computer Science</span>
+                <span className="text-foreground">Computer Science </span>
                 four internships: three at an AI company and one at a
                 hedge-fund. Currently, I work as a software developer where
                 I&rsquo;m exploring AI applications for traditional telephony
@@ -78,10 +78,10 @@ export default function AboutPage() {
       <Reveal delay={0.12}>
         <section className="mt-16 rounded-2xl border border-border bg-surface p-8 shadow-[var(--shadow-soft)]">
           <p className="text-lg text-foreground">
-            want to reach out or just want to say hi?
+            Want to reach out or just want to say hi?
           </p>
           <ObfuscatedEmail className="group mt-5 inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-accent px-6 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md">
-            get in touch
+            Get in touch
             <span className="transition-transform duration-200 group-hover:translate-x-0.5">
               →
             </span>

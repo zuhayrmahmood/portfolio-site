@@ -13,10 +13,15 @@ const nextConfig: NextConfig = {
 
 const withMDX = createMDX({
   options: {
-    // Turbopack (the Next 16 default) needs plugins referenced by name.
+    // Turbopack (the Next 16 default) needs plugins referenced by name, with
+    // only serializable options (functions can't cross into the Rust worker).
     // remark-gfm = tables, task lists, strikethrough, autolinks.
     remarkPlugins: ["remark-gfm"],
-    rehypePlugins: [],
+    // rehype-img-size reads each post image from `public/` at build time and
+    // stamps its intrinsic width/height onto the <img>, which the `img`
+    // override in mdx-components.tsx forwards to next/image (Next 16 requires
+    // explicit dimensions for string srcs). Prevents layout shift.
+    rehypePlugins: [["rehype-img-size", { dir: "public" }]],
   },
 });
 
