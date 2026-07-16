@@ -45,11 +45,12 @@ export default function AboutPage() {
                 a degree in{" "}
                 <span className="text-foreground">Computer Science</span>.
                 During my time at McGill, I was fortunate enough to complete{" "}
-                <span className="text-foreground">Computer Science </span>
-                four internships: three at an AI company and one at a
-                hedge-fund. Currently, I work as a software developer where
-                I&rsquo;m exploring AI applications for traditional telephony
-                platforms.
+                <span className="text-foreground">four internships</span>: three
+                at an AI company and one at a hedge-fund. Currently, I work as a
+                software developer where I&rsquo;m{" "}
+                <span className="text-foreground">
+                  exploring AI applications for traditional telephony platforms.
+                </span>
               </p>
             </div>
           </div>
