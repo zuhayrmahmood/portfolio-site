@@ -37,114 +37,106 @@ export default async function OpengraphImage() {
   ]);
 
   return new ImageResponse(
-    (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          // Warm "lit paper" wash — a lighter cream up top settling into the
-          // page cream, echoing the radial highlight on the live site.
-          backgroundColor: BG,
-          backgroundImage: `linear-gradient(180deg, #fffefb 0%, ${BG} 46%)`,
-          color: FG,
-          fontFamily: "Inter",
-          padding: "84px 88px",
-        }}
-      >
-        {/* Nav echo — tells a link-preview reader what's inside. */}
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        // Warm "lit paper" wash — a lighter cream up top settling into the
+        // page cream, echoing the radial highlight on the live site.
+        backgroundColor: BG,
+        backgroundImage: `linear-gradient(180deg, #fffefb 0%, ${BG} 46%)`,
+        color: FG,
+        fontFamily: "Inter",
+        padding: "84px 88px",
+      }}
+    >
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {/* The name, exactly as the hero stacks it: Fraunces, two lines. */}
         <div
           style={{
             display: "flex",
-            fontSize: 22,
+            flexDirection: "column",
+            fontFamily: "Fraunces",
             fontWeight: 500,
-            letterSpacing: 4,
-            color: SUBTLE,
+            fontSize: 150,
+            lineHeight: 0.95,
+            letterSpacing: -4,
+            color: FG,
           }}
         >
-          ABOUT · PROJECTS · WRITING
+          <div style={{ display: "flex" }}>Zuhayr</div>
+          <div style={{ display: "flex" }}>Mahmood</div>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          {/* The name, exactly as the hero stacks it: Fraunces, two lines. */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              fontFamily: "Fraunces",
-              fontWeight: 500,
-              fontSize: 150,
-              lineHeight: 0.95,
-              letterSpacing: -4,
-              color: FG,
-            }}
-          >
-            <div style={{ display: "flex" }}>Zuhayr</div>
-            <div style={{ display: "flex" }}>Mahmood</div>
-          </div>
+        {/* The delicate editorial rule the name sits above (.hero-ground). */}
+        <div
+          style={{
+            display: "flex",
+            width: 560,
+            height: 1,
+            marginTop: 40,
+            backgroundImage: `linear-gradient(to right, transparent, ${GROUND} 12%, ${GROUND} 88%, transparent)`,
+          }}
+        />
 
-          {/* The delicate editorial rule the name sits above (.hero-ground). */}
-          <div
-            style={{
-              display: "flex",
-              width: 560,
-              height: 1,
-              marginTop: 40,
-              backgroundImage: `linear-gradient(to right, transparent, ${GROUND} 12%, ${GROUND} 88%, transparent)`,
-            }}
-          />
-
-          {/* The typed tagline + blinking accent caret (<TypingText>). */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginTop: 34,
-              fontSize: 40,
-              color: MUTED,
-            }}
-          >
-            <span style={{ marginRight: 12 }}>I&apos;m a</span>
-            <span style={{ color: FG, fontWeight: 500 }}>software developer</span>
-            <span>.</span>
-            <div
-              style={{
-                display: "flex",
-                width: 4,
-                height: 40,
-                marginLeft: 10,
-                borderRadius: 1,
-                backgroundColor: ACCENT,
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Footer: accent bar (footer + caret motif) and the domain. */}
+        {/* The typed tagline + blinking accent caret (<TypingText>). */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            marginTop: 34,
+            fontSize: 40,
+            color: MUTED,
           }}
         >
+          <span style={{ marginRight: 12 }}>I&apos;m a</span>
+          <span style={{ color: FG, fontWeight: 500 }}>software developer</span>
+          <span>.</span>
           <div
             style={{
               display: "flex",
-              width: 72,
-              height: 6,
-              borderRadius: 3,
+              width: 4,
+              height: 40,
+              marginLeft: 10,
+              borderRadius: 1,
               backgroundColor: ACCENT,
             }}
           />
-          <div style={{ display: "flex", fontSize: 26, fontWeight: 500, color: MUTED }}>
-            {domain}
-          </div>
         </div>
       </div>
-    ),
+
+      {/* Footer: accent bar (footer + caret motif) and the domain. */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            width: 72,
+            height: 6,
+            borderRadius: 3,
+            backgroundColor: ACCENT,
+          }}
+        />
+        <div
+          style={{
+            display: "flex",
+            fontSize: 26,
+            fontWeight: 500,
+            color: MUTED,
+          }}
+        >
+          {domain}
+        </div>
+      </div>
+    </div>,
     {
       ...size,
       fonts: [
