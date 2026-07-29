@@ -10,8 +10,18 @@ export const site = {
   description:
     "The personal site of Zuhayr Mahmood — writing, projects, and ways to get in touch.",
 
+  // How you're described in structured data (schema.org Person.jobTitle).
+  // Helps search engines understand who you are when people search your name.
+  jobTitle: "Software Developer",
+
   // Your live domain (used for metadata / Open Graph URLs).
   url: "https://zuhayrmahmood.me",
+
+  // Google Search Console verification token. Leave "" until you've created a
+  // property at https://search.google.com/search-console — then either verify
+  // the domain via DNS (preferred, no token needed) or paste the HTML-tag
+  // token here to verify. When empty, no verification meta tag is emitted.
+  googleSiteVerification: "",
 
   // Main navigation (the name on the left links home).
   nav: [
@@ -30,9 +40,18 @@ export const site = {
     // components/obfuscated-email.tsx.
     { label: "Email", href: "email" },
     { label: "GitHub", href: "https://github.com/zuhayrmahmood" },
-    { label: "LinkedIn", href: "#" }, // TODO
-    { label: "X", href: "#" }, // TODO
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/zuhayr-mahmood" },
   ],
 } as const;
 
 export type SocialLink = (typeof site.socials)[number];
+
+/**
+ * Real, absolute profile URLs for schema.org `sameAs` — the signal Google uses
+ * to confirm this site represents the same person as those profiles. Derived
+ * from `site.socials` so it stays in sync with the footer; placeholder ("#")
+ * and the "email" sentinel are filtered out automatically.
+ */
+export const sameAs: string[] = site.socials
+  .map((s) => s.href)
+  .filter((href) => href.startsWith("http"));

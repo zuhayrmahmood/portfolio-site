@@ -7,6 +7,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "About",
   description: `About ${site.name} — who I am, what I'm working on, and how to reach me.`,
+  alternates: { canonical: "/about" },
 };
 
 // TODO: edit these to reflect what you're currently up to.

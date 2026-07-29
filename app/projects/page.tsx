@@ -8,6 +8,7 @@ import { formatDate } from "@/lib/writing";
 export const metadata: Metadata = {
   title: "Projects",
   description: "Things I've built, by Zuhayr Mahmood.",
+  alternates: { canonical: "/projects" },
 };
 
 export default async function ProjectsPage() {

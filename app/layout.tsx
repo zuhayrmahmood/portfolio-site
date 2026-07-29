@@ -3,6 +3,7 @@ import { Fraunces, Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
+import { JsonLd } from "@/components/json-ld";
 import { site } from "@/lib/site";
 import { THEME_STORAGE_KEY, THEME_COLORS } from "@/lib/theme";
 
@@ -45,6 +46,10 @@ export const metadata: Metadata = {
     title: site.title,
     description: site.description,
   },
+  // Emitted only once a Search Console token is set in lib/site.ts.
+  ...(site.googleSiteVerification
+    ? { verification: { google: site.googleSiteVerification } }
+    : {}),
 };
 
 export const viewport: Viewport = {
@@ -81,6 +86,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="flex min-h-full flex-col">
+        <JsonLd />
         <Nav />
         <main className="flex-1">{children}</main>
         <Footer />
