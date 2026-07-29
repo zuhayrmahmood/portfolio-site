@@ -1,7 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { PhysicsHero } from "@/components/physics-hero";
 import { TypingText } from "@/components/typing-text";
+
+// Explicit self-canonical for the homepage (the other static routes set their
+// own below). Prevents any query-string or trailing-slash variant from being
+// treated as a separate URL.
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function Home() {
   return (

@@ -7,6 +7,7 @@ import { getAllPosts, formatDate } from "@/lib/writing";
 export const metadata: Metadata = {
   title: "Writing",
   description: "Essays, notes, and ideas by Zuhayr Mahmood.",
+  alternates: { canonical: "/writing" },
 };
 
 export default async function WritingPage() {
