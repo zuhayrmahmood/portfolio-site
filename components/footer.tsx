@@ -4,7 +4,10 @@ import { site } from "@/lib/site";
 const LINK_CLASS = "text-muted transition-colors hover:text-accent";
 
 export function Footer() {
-  const links = site.socials.filter((s) => s.href !== "#");
+  // Show the email sentinel and any real (http) link; hides placeholders.
+  const links = site.socials.filter(
+    (s) => s.href === "email" || s.href.startsWith("http"),
+  );
 
   return (
     <footer className="border-t border-border/60">

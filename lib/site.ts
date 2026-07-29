@@ -40,10 +40,7 @@ export const site = {
     // components/obfuscated-email.tsx.
     { label: "Email", href: "email" },
     { label: "GitHub", href: "https://github.com/zuhayrmahmood" },
-    // TODO: paste your real LinkedIn URL (e.g. https://www.linkedin.com/in/zuhayr-mahmood).
-    // Until it starts with "http" it stays hidden AND is excluded from the
-    // structured-data `sameAs` links below — so leaving it as "#" is safe.
-    { label: "LinkedIn", href: "#" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/zuhayr-mahmood" },
   ],
 } as const;
 
