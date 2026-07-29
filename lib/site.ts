@@ -6,9 +6,9 @@
 export const site = {
   name: "Zuhayr Mahmood",
   shortName: "Zuhayr",
-  title: "Zuhayr Mahmood — Portfolio",
+  title: "Zuhayr Mahmood",
   description:
-    "The personal site of Zuhayr Mahmood — writing, projects, and ways to get in touch.",
+    "My personal website, take a look around and feel free to reach out!",
 
   // How you're described in structured data (schema.org Person.jobTitle).
   // Helps search engines understand who you are when people search your name.
@@ -45,6 +45,18 @@ export const site = {
 } as const;
 
 export type SocialLink = (typeof site.socials)[number];
+
+/**
+ * Tab-title format, e.g. "About · Zuhayr Mahmood". The root layout hands this
+ * to Next as `title.template`, which covers every child route. The homepage
+ * has to apply it itself: a template set in `layout.tsx` deliberately does not
+ * apply to the `page.tsx` of that same segment, so `app/page.tsx` calls
+ * `pageTitle("Home")` instead. Keeping both off one string means the separator
+ * only ever changes in one place.
+ */
+export const titleTemplate = `%s · ${site.name}`;
+
+export const pageTitle = (label: string) => titleTemplate.replace("%s", label);
 
 /**
  * Real, absolute profile URLs for schema.org `sameAs` — the signal Google uses

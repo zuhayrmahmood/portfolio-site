@@ -4,7 +4,7 @@ import "./globals.css";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { JsonLd } from "@/components/json-ld";
-import { site } from "@/lib/site";
+import { site, titleTemplate } from "@/lib/site";
 import { THEME_STORAGE_KEY, THEME_COLORS } from "@/lib/theme";
 
 const inter = Inter({
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
     default: site.title,
-    template: `%s · ${site.name}`,
+    template: titleTemplate,
   },
   description: site.description,
   authors: [{ name: site.name, url: site.url }],

@@ -3,11 +3,15 @@ import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { PhysicsHero } from "@/components/physics-hero";
 import { TypingText } from "@/components/typing-text";
+import { pageTitle } from "@/lib/site";
 
 // Explicit self-canonical for the homepage (the other static routes set their
 // own below). Prevents any query-string or trailing-slash variant from being
 // treated as a separate URL.
 export const metadata: Metadata = {
+  // Applied by hand rather than via the root layout's `title.template`: that
+  // template covers child segments only, never the page of its own segment.
+  title: pageTitle("Home"),
   alternates: { canonical: "/" },
 };
 
