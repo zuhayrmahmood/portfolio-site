@@ -1,7 +1,6 @@
 # zuhayrmahmood.me
 
-Personal site of Zuhayr Mahmood — a calm, fast portfolio with an interactive
-physics hero, and in-repo MDX writing + projects sections.
+My personal website, feel free to use the source code!
 
 ## Tech stack
 
