@@ -10,11 +10,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-// TODO: edit these to reflect what you're currently up to.
 const currently = [
-  { label: "Building", value: "[a lean angle sensor]" },
-  { label: "Reading", value: "[Dune by Frank Herbert]" },
-  { label: "Based in", value: "[Montreal]" },
+  { label: "Building", value: "a lean angle sensor" },
+  { label: "Reading", value: "Dune by Frank Herbert" },
+  { label: "Based in", value: "Montreal" },
 ];
 
 export default function AboutPage() {
@@ -28,7 +27,6 @@ export default function AboutPage() {
             <h1 className="font-serif text-4xl font-medium tracking-tight text-foreground sm:text-5xl">
               About
             </h1>
-            {/* TODO: replace with your real bio. */}
             <div className="mt-5 space-y-4 text-lg leading-relaxed text-muted">
               <p>
                 Hey! I&rsquo;m Zuhayr, a{" "}
