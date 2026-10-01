@@ -16,11 +16,24 @@ A few days ago, she asked me if I could her a platform to make the judging proce
 
 This platform allows judges to log in (via an auth code generated and sent to them via email by the organizer, *no one wants to make a pesky account for a single event*). 
 After logging in, judges can submit their scores for each poster they were assigned (the organizer can assign posters), they submit it and ta-dah! The posters are all rated, and
-the organizer isn't chasing down judges for their scores, correcting their math or doing a [mad minute](https://www.superteacherworksheets.com/math-drills-minute.html).
-
+the organizer isn't chasing down judges for their scores, correcting their math or doing a [mad minute](https://www.superteacherworksheets.com/math-drills-minute.html)
+to tally up the results.
 
 
 ## How it works
+
+This is a Node 16 app that replaces paper judging sheets with a web platform. It has a few significant parts to it.
+
+### Main Pages
+
+There are two main pages in this app, the organizer page *(only the organizer can see this page)*, and
+the judge page. Judges receive a unique auth code from the organizer, which they can use to log in and
+start judging presentations/posters. Each judge has specific posters assigned to them, and once their scores
+are submitted, the organizer can view the results and see which posters received which scores from who. 
+
+### Under the hood
+
+Under the hood, this app uses Next.js and the backend is powered by a Postgres database (hosted on Supabase). 
 
 
 
