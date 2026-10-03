@@ -10,11 +10,11 @@ My sister hosts conferences pretty often, however, there is one problem: the jud
 for them to fill out and return. This gets tedious really fast, sometimes there are judges that add up their totals wrong, sometimes they don't return their sheet *(and she has to chase them down)*. 
 All in all, it's a mess. 
 
-A few days ago, she asked me if I could her a platform to make the judging process easier, and I couldn't say no to the opportunity of learning something new.
+A few days ago, she asked me if I could build her a platform to make the judging process easier, and I couldn't say no to the opportunity of learning something new.
 
 ## What it does
 
-This platform allows judges to log in (via an auth code generated and sent to them via email by the organizer, *no one wants to make a pesky account for a single event*). 
+This platform allows judges to log in (via an access code the organizer generates and hands to them on a printed card, *no one wants to make a pesky account for a single event*). 
 After logging in, judges can submit their scores for each poster they were assigned (the organizer can assign posters), they submit it and ta-dah! The posters are all rated, and
 the organizer isn't chasing down judges for their scores, correcting their math or doing a [mad minute](https://www.superteacherworksheets.com/math-drills-minute.html)
 to tally up the results.
@@ -22,22 +22,67 @@ to tally up the results.
 
 ## How it works
 
-This is a Node 16 app that replaces paper judging sheets with a web platform. It has a few significant parts to it.
+This is a Next.js 16 app that replaces paper judging sheets with a web platform. It has a few significant parts to it.
 
 ### Main Pages
 
-There are two main pages in this app, the organizer page *(only the organizer can see this page)*, and
-the judge page. Judges receive a unique auth code from the organizer, which they can use to log in and
+There are two main pages in this app, the organizer page *(only organizers can see this page, and only for their own events)*, and
+the judge page. Judges receive a unique access code from the organizer, which they can use to log in and
 start judging presentations/posters. Each judge has specific posters assigned to them, and once their scores
 are submitted, the organizer can view the results and see which posters received which scores from who. 
 
 ### Under the hood
 
-Under the hood, this app uses Next.js and the backend is powered by a Postgres database (hosted on Supabase). 
+Under the hood, this app uses Next.js and the backend is powered by a Postgres database (hosted on Supabase).
+I've written a breakdown on some of the components of the app and how they work:
 
+**Logging in:** Each judge gets an 8-character code like `K7M2-Q9XR`. The characters come from an alphabet
+with all the lookalikes removed *(no `0`/`O`, no `1`/`I`/`L`)*, so nobody squinting at a card in a loud hall
+types the wrong thing *(and then starts getting mad at the organizer)*. The database never stores the code itself, only a hash of it, so the organizer sees
+each code exactly once, when they're generated. When a judge types their code in, it gets hashed, finds
+the matching judge, and gives their phone a signed cookie that lasts the event day. To stop people from guessing
+codes, a code gets locked out after 10 wrong tries in 15 minutes. That limit is tied to the *code*. Organizers log in separately, with a normal email
+and password through Supabase Auth, and for them, they'll get an account that they can use.
 
+**Scoring.** The organizer sets up the rubric, and each criterion has its own maximum and its own weight.
+To get a total, each score becomes a fraction of its maximum, gets multiplied by its weight, and the whole
+thing is averaged into a percentage. That means a 1–5 criterion and a 1–10 criterion can live on the same sheet.
+For example, *Clarity* 4/5 (weight 1) and *Research* 7/10 (weight 2) works out to
+(0.8 × 1 + 0.7 × 2) / 3 ≈ **73%**. This is set to change depending on user feedback and organizer needs. 
 
-## Notable bits
+**Making the rankings fair.** Averaging every judge's totals for a poster gives you its **raw** score, which is
+the number you'd have gotten on paper. The problem is that some judges are harsh and some are generous, and
+no two posters get seen by the same group of judges, so a poster that happens to draw three tough judges gets
+punished for it. That's why the dashboard also has a **normalized** ranking: for every score, it asks "how far
+above or below *this judge's own average* is this?", and then averages those. A 70% from a judge who usually gives
+60% counts for more than a 70% from one who usually gives 85%. Two edge cases are handled on purpose: a judge who
+has only scored one poster (or gave everything the same score) counts as neutral, and a poster nobody has judged
+yet is *unranked*, not zero.
 
-[Anything worth calling out — a tricky decision, a constraint, a piece you're
-proud of.]
+All of this math lives in the database as SQL views, so the dashboard just asks Postgres for the results and
+refreshes every 15 seconds. There's a copy of the same math in TypeScript *(so judges can see their total before
+they submit)*, and the tests check that both versions give the same answers so they can't quietly drift apart.
+
+**Assigning posters.** Posters get lined up in the order you'd walk past them (aisle, then poster number).
+That line gets cut into one equal chunk per judge, and each poster goes to the judges who own its chunk and the
+next couple of chunks after it *(three judges per poster by default, the organizer can change that)*. This way,
+every judge gets basically the same number of posters, *and* their posters form one continuous stretch of the hall,
+so nobody is zigzagging between opposite corners. The list is just a suggested route, though. If a judge wanders
+over to the poster next door, they can still score it.
+
+**Surviving bad wifi.** Poster halls have terrible wifi, so the scoring form assumes the connection will drop.
+Every tap saves the sheet on the phone itself, so a dead battery or an accidental back-swipe doesn't lose
+anything. If a submit fails, it goes into an outbox and the judge just moves on to the next poster. A banner shows
+what's still pending, and the app retries every 20 seconds and as soon as the phone is back online. Sending the
+same sheet twice is harmless, because the database keeps exactly one sheet per judge per poster and a resend
+just overwrites it instead of counting it twice.
+
+**Keeping it locked down.** The browser never talks to the database directly. Every table in Supabase is locked so
+the public key can't read or write anything, and all reads and writes go through the server, which checks who you
+are first. Events belong to organizations, so two people running two different conferences on the same deployment
+can't see each other's posters, judges or results.
+
+## Next Steps
+
+Since the project is still a work in progress, there are a few tweaks I plan on making after going back and forth with my sister!
+
