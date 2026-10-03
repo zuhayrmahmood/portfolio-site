@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Poster Judging Platform",
-  date: "2026-09-10",
+  date: "2026-10-03",
   summary: "A platform for judging posters at conferences, built at the request of my sister.",
   stack: ["Next.js", "TypeScript", "Work In Progress"],
   repo: "https://github.com/zuhayrmahmood/poster-judging",
@@ -44,40 +44,23 @@ the matching judge, and gives their phone a signed cookie that lasts the event d
 codes, a code gets locked out after 10 wrong tries in 15 minutes. That limit is tied to the *code*. Organizers log in separately, with a normal email
 and password through Supabase Auth, and for them, they'll get an account that they can use.
 
-**Scoring.** The organizer sets up the rubric, and each criterion has its own maximum and its own weight.
+**Scoring:** The organizer sets up the rubric, and each criterion has its own maximum and its own weight.
 To get a total, each score becomes a fraction of its maximum, gets multiplied by its weight, and the whole
 thing is averaged into a percentage. That means a 1–5 criterion and a 1–10 criterion can live on the same sheet.
 For example, *Clarity* 4/5 (weight 1) and *Research* 7/10 (weight 2) works out to
 (0.8 × 1 + 0.7 × 2) / 3 ≈ **73%**. This is set to change depending on user feedback and organizer needs. 
 
-**Making the rankings fair.** Averaging every judge's totals for a poster gives you its **raw** score, which is
-the number you'd have gotten on paper. The problem is that some judges are harsh and some are generous, and
-no two posters get seen by the same group of judges, so a poster that happens to draw three tough judges gets
-punished for it. That's why the dashboard also has a **normalized** ranking: for every score, it asks "how far
-above or below *this judge's own average* is this?", and then averages those. A 70% from a judge who usually gives
-60% counts for more than a 70% from one who usually gives 85%. Two edge cases are handled on purpose: a judge who
-has only scored one poster (or gave everything the same score) counts as neutral, and a poster nobody has judged
-yet is *unranked*, not zero.
+**Assigning posters:** Currently, posters are assigned automatically to judges, however, this is a work in progress. Specifically,
+I'm looking to add a feature where organizers can tag posters and assign them to judges based on these tags. This is important
+so that judges can be assigned to posters that are relevant to their area of expertise. 
 
-All of this math lives in the database as SQL views, so the dashboard just asks Postgres for the results and
-refreshes every 15 seconds. There's a copy of the same math in TypeScript *(so judges can see their total before
-they submit)*, and the tests check that both versions give the same answers so they can't quietly drift apart.
-
-**Assigning posters.** Posters get lined up in the order you'd walk past them (aisle, then poster number).
-That line gets cut into one equal chunk per judge, and each poster goes to the judges who own its chunk and the
-next couple of chunks after it *(three judges per poster by default, the organizer can change that)*. This way,
-every judge gets basically the same number of posters, *and* their posters form one continuous stretch of the hall,
-so nobody is zigzagging between opposite corners. The list is just a suggested route, though. If a judge wanders
-over to the poster next door, they can still score it.
-
-**Surviving bad wifi.** Poster halls have terrible wifi, so the scoring form assumes the connection will drop.
-Every tap saves the sheet on the phone itself, so a dead battery or an accidental back-swipe doesn't lose
-anything. If a submit fails, it goes into an outbox and the judge just moves on to the next poster. A banner shows
-what's still pending, and the app retries every 20 seconds and as soon as the phone is back online. Sending the
+**Accounting for bad wifi:** Oftentimes bad wifi can be a problem in large venues *(not everyone has LTE/5G)*, so the scoring form assumes the connection will drop.
+Every tap saves the sheet on the phone itself, so nothing gets lost in case the phone dies or you exit out of the site. If a submit fails, it goes into an outbox and the judge just moves on to the next poster.
+ The app retries every 20 seconds and as soon as the phone is back online. Sending the
 same sheet twice is harmless, because the database keeps exactly one sheet per judge per poster and a resend
 just overwrites it instead of counting it twice.
 
-**Keeping it locked down.** The browser never talks to the database directly. Every table in Supabase is locked so
+**Lockdown defense:** The browser never talks to the database directly. Every table in Supabase is locked so
 the public key can't read or write anything, and all reads and writes go through the server, which checks who you
 are first. Events belong to organizations, so two people running two different conferences on the same deployment
 can't see each other's posters, judges or results.
@@ -85,4 +68,5 @@ can't see each other's posters, judges or results.
 ## Next Steps
 
 Since the project is still a work in progress, there are a few tweaks I plan on making after going back and forth with my sister!
+More updates here soon! Expect more here before January 2027.
 
