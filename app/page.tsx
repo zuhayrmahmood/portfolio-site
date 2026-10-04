@@ -35,7 +35,7 @@ export default function Home() {
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
               href="/about"
-              className="group inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-accent px-6 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md"
+              className="group inline-flex h-11 items-center justify-center gap-1.5 rounded-full bg-accent px-6 text-sm font-medium text-on-accent shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md"
             >
               About me
               <span className="transition-transform duration-200 group-hover:translate-x-0.5">

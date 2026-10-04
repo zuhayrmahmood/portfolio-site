@@ -1,21 +1,26 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ *
- * Design tokens — "Warm minimal" (light)
- * Cream background, warm near-black text, creamy sky-blue accent.
+ * Design tokens — Rosé Pine Dawn (light)
+ * https://rosepinetheme.com/palette — Rosé Pine's official light variant.
+ * Note the palette's own naming is inverted vs. ours in brightness order:
+ * our `muted` (secondary text) is RP "subtle", our `subtle` (tertiary) is
+ * RP "muted". The accent is RP iris, deepened from #907aa9 → #78629c so
+ * links/labels clear WCAG AA (4.5:1) on the base — stock Dawn iris is 3.5:1.
  * ------------------------------------------------------------------ */
 @theme {
-  --color-background: #faf8f4; /* cream page background */
-  --color-surface: #ffffff; /* cards / raised panels   */
-  --color-surface-2: #f2eee7; /* subtle fills / hovers   */
-  --color-foreground: #2b2a28; /* warm near-black text     */
-  --color-muted: #6b6660; /* secondary text           */
-  --color-subtle: #9a938a; /* tertiary text / hints    */
-  --color-accent: #3d84b8; /* creamy sky blue           */
-  --color-accent-hover: #2f6690; /* darker sky blue           */
-  --color-accent-soft: #e3edf5; /* accent tint background   */
-  --color-border: #e7e1d8; /* warm hairline borders    */
-  --color-ground: #ded5c8; /* hero "ground" line       */
+  --color-background: #faf4ed; /* base                    */
+  --color-surface: #fffaf3; /* surface                 */
+  --color-surface-2: #f2e9e1; /* overlay                 */
+  --color-foreground: #575279; /* text                    */
+  --color-muted: #797593; /* subtle (secondary text) */
+  --color-subtle: #9893a5; /* muted (tertiary / hints)*/
+  --color-accent: #78629c; /* iris, deepened for AA   */
+  --color-accent-hover: #5f4d82; /* darker iris             */
+  --color-accent-soft: #ece3e8; /* iris tint over base     */
+  --color-on-accent: #faf4ed; /* text on accent fills    */
+  --color-border: #dfdad9; /* highlight med           */
+  --color-ground: #cecacd; /* highlight high          */
 }
 
 /* Fonts are wired to the next/font CSS variables set in app/layout.tsx.
@@ -29,31 +34,33 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Design tokens — "Warm minimal" (dark)
- * Same roles as the light palette above, inverted: charcoal background,
- * warm off-white text, sky-blue accent brightened for legibility on a
- * dark ground. Applied via [data-theme="dark"] (components/theme-toggle.tsx
- * + localStorage) or, absent an explicit choice, the OS preference — so
- * the page is still correctly themed with JS disabled.
+ * Design tokens — Rosé Pine Moon × deep space (dark)
+ * Moon text + iris/rose hues over a darker, near-black indigo base
+ * ("space"), with the accent dimmed slightly to sit in the darker ground.
+ * Applied via [data-theme="dark"]
+ * (components/theme-toggle.tsx + localStorage) or, absent an explicit
+ * choice, the OS preference — so the page is still correctly themed with
+ * JS disabled.
  * ------------------------------------------------------------------ */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
-    --color-background: #17140f;
-    --color-surface: #201c17;
-    --color-surface-2: #2a2520;
-    --color-foreground: #f2ece2;
-    --color-muted: #b2aaa0;
-    --color-subtle: #7d7668;
-    --color-accent: #5aa0cc;
-    --color-accent-hover: #82c3ea;
-    --color-accent-soft: #1e2c36;
-    --color-border: #332e27;
-    --color-ground: #423c33;
-    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.45);
-    --shadow-soft-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
-    --shadow-letter-rest: 0 10px 22px rgba(0, 0, 0, 0.5);
-    --shadow-letter-grab: 0 18px 30px rgba(0, 0, 0, 0.65);
-    --color-paper-glow: rgba(255, 255, 255, 0.05);
+    --color-background: #12101c; /* deep space     */
+    --color-surface: #1a1827; /* space surface  */
+    --color-surface-2: #24213a; /* space overlay  */
+    --color-foreground: #e0def4; /* text           */
+    --color-muted: #908caa; /* subtle         */
+    --color-subtle: #6e6a86; /* muted          */
+    --color-accent: #b094d8; /* iris, dimmed   */
+    --color-accent-hover: #dd8f8c; /* rose, dimmed   */
+    --color-accent-soft: #2a2438; /* iris over base */
+    --color-on-accent: #12101c; /* base           */
+    --color-border: #2a2740; /* hairline       */
+    --color-ground: #3a3652; /* highlight      */
+    --shadow-soft: 0 10px 30px rgba(4, 3, 10, 0.45);
+    --shadow-soft-lg: 0 10px 30px rgba(4, 3, 10, 0.5);
+    --shadow-letter-rest: 0 10px 22px rgba(4, 3, 10, 0.5);
+    --shadow-letter-grab: 0 18px 30px rgba(4, 3, 10, 0.65);
+    --color-paper-glow: rgba(196, 167, 231, 0.06); /* faint iris */
     --grain-blend: overlay;
     --grain-opacity: 0.05;
     color-scheme: dark;
@@ -61,22 +68,23 @@
 }
 
 :root[data-theme="dark"] {
-  --color-background: #17140f;
-  --color-surface: #201c17;
-  --color-surface-2: #2a2520;
-  --color-foreground: #f2ece2;
-  --color-muted: #b2aaa0;
-  --color-subtle: #7d7668;
-  --color-accent: #5aa0cc;
-  --color-accent-hover: #82c3ea;
-  --color-accent-soft: #1e2c36;
-  --color-border: #332e27;
-  --color-ground: #423c33;
-  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.45);
-  --shadow-soft-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
-  --shadow-letter-rest: 0 10px 22px rgba(0, 0, 0, 0.5);
-  --shadow-letter-grab: 0 18px 30px rgba(0, 0, 0, 0.65);
-  --color-paper-glow: rgba(255, 255, 255, 0.05);
+  --color-background: #12101c; /* deep space     */
+  --color-surface: #1a1827; /* space surface  */
+  --color-surface-2: #24213a; /* space overlay  */
+  --color-foreground: #e0def4; /* text           */
+  --color-muted: #908caa; /* subtle         */
+  --color-subtle: #6e6a86; /* muted          */
+  --color-accent: #b094d8; /* iris, dimmed   */
+  --color-accent-hover: #dd8f8c; /* rose, dimmed   */
+  --color-accent-soft: #2a2438; /* iris over base */
+  --color-on-accent: #12101c; /* base           */
+  --color-border: #2a2740; /* hairline       */
+  --color-ground: #3a3652; /* highlight      */
+  --shadow-soft: 0 10px 30px rgba(4, 3, 10, 0.45);
+  --shadow-soft-lg: 0 10px 30px rgba(4, 3, 10, 0.5);
+  --shadow-letter-rest: 0 10px 22px rgba(4, 3, 10, 0.5);
+  --shadow-letter-grab: 0 18px 30px rgba(4, 3, 10, 0.65);
+  --color-paper-glow: rgba(196, 167, 231, 0.06); /* faint iris */
   --grain-blend: overlay;
   --grain-opacity: 0.05;
   color-scheme: dark;
@@ -109,13 +117,13 @@ html {
  * into a static color fallback at build time, which would make the dark-mode
  * override below dead code — so these deliberately stay outside @theme. */
 :root {
-  --color-paper-glow: #ffffff;
+  --color-paper-glow: #fffaf3;
   --grain-blend: multiply;
   --grain-opacity: 0.04;
-  --shadow-soft: 0 10px 30px rgba(43, 42, 40, 0.06); /* cards */
-  --shadow-soft-lg: 0 10px 30px rgba(43, 42, 40, 0.08); /* portrait */
-  --shadow-letter-rest: 0 10px 22px rgba(43, 42, 40, 0.09); /* hero letters, idle */
-  --shadow-letter-grab: 0 18px 30px rgba(43, 42, 40, 0.18); /* hero letters, held */
+  --shadow-soft: 0 10px 30px rgba(87, 82, 121, 0.07); /* cards */
+  --shadow-soft-lg: 0 10px 30px rgba(87, 82, 121, 0.09); /* portrait */
+  --shadow-letter-rest: 0 10px 22px rgba(87, 82, 121, 0.1); /* hero letters, idle */
+  --shadow-letter-grab: 0 18px 30px rgba(87, 82, 121, 0.2); /* hero letters, held */
 }
 
 body {
@@ -157,7 +165,7 @@ body::before {
 
 ::selection {
   background: var(--color-accent);
-  color: #fff;
+  color: var(--color-on-accent);
 }
 
 /* ------------------------------------------------------------------ *

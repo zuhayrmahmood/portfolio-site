@@ -17,12 +17,12 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 // Light-palette tokens, copied from app/globals.css (@theme block).
-const BG = "#faf8f4";
-const FG = "#2b2a28";
-const MUTED = "#6b6660";
-const SUBTLE = "#9a938a";
-const ACCENT = "#3d84b8";
-const GROUND = "#ded5c8";
+const BG = "#faf4ed";
+const FG = "#575279";
+const MUTED = "#797593";
+const SUBTLE = "#9893a5";
+const ACCENT = "#78629c";
+const GROUND = "#cecacd";
 
 export default async function OpengraphImage() {
   const domain = site.url.replace(/^https?:\/\//, "");
@@ -47,7 +47,7 @@ export default async function OpengraphImage() {
         // Warm "lit paper" wash — a lighter cream up top settling into the
         // page cream, echoing the radial highlight on the live site.
         backgroundColor: BG,
-        backgroundImage: `linear-gradient(180deg, #fffefb 0%, ${BG} 46%)`,
+        backgroundImage: `linear-gradient(180deg, #fffaf3 0%, ${BG} 46%)`,
         color: FG,
         fontFamily: "Inter",
         padding: "84px 88px",

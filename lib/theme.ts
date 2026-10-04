@@ -5,8 +5,8 @@ export const THEME_STORAGE_KEY = "theme";
 // drives the browser-chrome <meta name="theme-color"> tag, so a mismatch
 // won't show on the page itself, just in the OS status bar.
 export const THEME_COLORS = {
-  light: "#faf8f4",
-  dark: "#17140f",
+  light: "#faf4ed",
+  dark: "#12101c",
 } as const;
 
 export type Theme = keyof typeof THEME_COLORS;
